@@ -10,11 +10,21 @@ function plugin_init_vigilo() {
     $hookObj    =  new VigiloHooks();
 
     $hooks['csrf_compliant'][$p]        = true;
-    $hooks['item_add'][$p]              = array("Computer" => array($hookObj, "add"));
-    $hooks['item_update'][$p]           = array("Computer" => array($hookObj, "update"));
-    $hooks['item_purge'][$p]            = array("Computer" => array($hookObj, "delete"));
-    $hooks['item_delete'][$p]           = array("Computer" => array($hookObj, "delete"));
-    $hooks['item_restore'][$p]          = array("Computer" => array($hookObj, "add"));
+    $hooks['item_add'][$p]              = array("Computer" => array($hookObj, "add"),
+						"ComputerDisk" => array($hookObj),"manageDisks",
+						"Network" => array($hookObj),"manageNetworks");
+    $hooks['item_update'][$p]           = array("Computer" => array($hookObj, "update"),
+						"ComputerDisk" => array($hookObj),"manageDisks",
+						"Network" => array($hookObj),"manageNetworks");
+    $hooks['item_purge'][$p]            = array("Computer" => array($hookObj, "delete"),
+						"ComputerDisk" => array($hookObj),"manageDisks",
+						"Network" => array($hookObj),"manageNetworks");
+    $hooks['item_delete'][$p]           = array("Computer" => array($hookObj, "delete"),
+						"ComputerDisk" => array($hookObj),"manageDisks",
+						"Network" => array($hookObj),"manageNetworks");
+    $hooks['item_restore'][$p]          = array("Computer" => array($hookObj, "add"),
+						"ComputerDisk" => array($hookObj),"manageDisks",
+						"Network" => array($hookObj),"manageNetworks");
     $hooks["menu_toadd"][$p]['plugins'] = 'PluginVigiloMenu';
     $hooks['config_page'][$p]           = 'front/menu.php?itemtype=vigilo';
 }
