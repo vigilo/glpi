@@ -10,18 +10,20 @@ class VigiloArg extends VigiloXml
         if (is_array($values)) {
             $new_values = array();
             foreach ($values as $value) {
-                if (is_string($value))
+                if (is_string($value)) {
                     $new_values[] = new VigiloItem($value);
-                else if (!is_a($value, 'VigiloItem'))
+                } elseif (!is_a($value, 'VigiloItem')) {
                     throw new \RuntimeException();
-                else
+                } else {
                     $new_values[] = $value;
+                }
             }
             $values = $new_values;
-        } else if (!is_string($values) && !is_int($values) &&
-                   !is_bool($values) && !is_float($values))
+        } elseif (!is_string($values) && !is_int($values)
+            && !is_bool($values) && !is_float($values)
+        ) {
             throw new \RuntimeException();
-        else {
+        } else {
             $values = (string) $values;
         }
 
@@ -36,8 +38,9 @@ class VigiloArg extends VigiloXml
 
     public function getValue()
     {
-        if (is_string($this->values))
+        if (is_string($this->values)) {
             return $this->values;
+        }
         return array_map('getValue', $this->values);
     }
 

@@ -70,13 +70,14 @@ class PluginVigiloMenu extends CommonGLPI
                     break;
                 }
 
-                foreach ($read as $stream)
+                foreach ($read as $stream){
                     echo htmlspecialchars(fread($stream, 1024), ENT_HTML5 | ENT_QUOTES, "utf-8");
-                ob_flush();
+                };
+                //ob_flush();
                 flush();
-
-                if (feof($pipes[1]))
-                    break;
+                if (feof($pipes[1])){
+                  break;
+                }
             } while (1);
 
             $info = proc_get_status($res);

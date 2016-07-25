@@ -9,8 +9,9 @@ class VigiloTest extends VigiloXml
     {
         $new_args = array();
         foreach ($args as $arg) {
-            if (!is_a($arg, 'VigiloArg'))
+            if (!is_a($arg, 'VigiloArg')) {
                     throw new \RuntimeException();
+            }
             $new_args[$arg->getName()] = $arg;
         }
 
@@ -27,4 +28,3 @@ class VigiloTest extends VigiloXml
         );
     }
 }
- 

@@ -13,11 +13,12 @@ abstract class VigiloXml
         foreach ($args as $arg) {
             if (is_string($arg)) {
                 $new_args[] = htmlspecialchars($arg, ENT_XML1 | ENT_QUOTES, "utf-8");
-            } else if (is_array($arg)) {
+            } elseif (is_array($arg)) {
                 $acc = '';
                 foreach ($arg as $sub) {
-                    if (is_object($sub))
+                    if (is_object($sub)) {
                         $acc .= (string) $sub;
+                    }
                 }
                 $new_args[] = $acc;
             } else {
@@ -28,4 +29,3 @@ abstract class VigiloXml
         return vsprintf($s, $new_args);
     }
 }
-

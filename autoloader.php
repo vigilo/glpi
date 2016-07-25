@@ -1,7 +1,8 @@
 <?php
 
-function vigilo_autoloader($class_name){
-  if(strstr($class_name,'Vigilo')){
-    require_once __DIR__ . '/Vigilo/' . $class_name . '.php';
-  }
+function vigilo_autoloader($class_name)
+{
+    if (strncmp($class_name, 'Vigilo', 6)==0) {
+        require_once __DIR__ . DIRECTORY_SEPARATOR .'Vigilo'. DIRECTORY_SEPARATOR . $class_name . '.php';
+    }
 }
