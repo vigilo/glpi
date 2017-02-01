@@ -7,17 +7,18 @@ if (PluginVigiloMenu::canView()) {
                     "PluginVigiloMenu", "menu");
 
     $res = null;
+    $pipes = array();
+
     if (!empty($_POST["deploy"])) {
         $fds = array(
             1 => array("pipe", "w"),
             2 => array("pipe", "w"),
         );
-        $cmd = "/usr/bin/sudo -n /usr/bin/vigiconf deploy -f --debug 2>&1";
+	$cmd = "/usr/bin/sudo -n /usr/bin/vigiconf deploy -f --debug";
         $res = proc_open($cmd, $fds, $pipes);
         if (!is_resource($res))
-            $res = false;
+	    $res = false;
     }
-
     PluginVigiloMenu::displayMenu($res, $pipes);
 } else {
     Html::displayRightError();

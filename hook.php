@@ -62,6 +62,7 @@ class VigiloHooks
 
     public function update($computer)
     {
+	global $PLUGIN_HOOKS;
         if (isset($computer->oldvalues["name"])) {
             $this->unmonitor($computer->oldvalues["name"]);
         }

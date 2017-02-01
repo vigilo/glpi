@@ -25,7 +25,6 @@ class VigiloHost extends VigiloXml
 
         $this->selectTemplates();
         $this->selectGroups();
-        $this->monitorProcessor();
         $this->monitorMemory();
         $this->monitorNetworkInterfaces();
         $this->monitorSoftwares();
@@ -39,7 +38,9 @@ class VigiloHost extends VigiloXml
 
     protected function selectTemplates()
     {
-        if ($this->computer->getField("template_name")) {
+	$template_name = $this->computer->getField("template_name");
+
+        if ($template_name && $template_name !== "N/A") {
             $this->children[] = new VigiloHostTemplate($this->computer->getField("template_name"));
         }
         $refs = array(
@@ -53,7 +54,7 @@ class VigiloHost extends VigiloXml
             $id = $this->computer->fields[$field];
             $value = Dropdown::getDropdownName($table, $id);
             if ($value !== "" && $value !== null && $value !== "&nbsp;"
-                && $value !== false && $value !== "-----"
+                && $value !== false && $value !== "-----" && $value !== 'N/A'
             ) {
                 $model[] = $value;
             }
@@ -74,7 +75,7 @@ class VigiloHost extends VigiloXml
         $location->getFromDB($this->computer->fields["locations_id"]);
         if (!($location->getName()=='N/A')) {
             $locationCompleteName=explode(" > ", $location->getField("completename"));
-            $locationRealName="/" . implode("/", $locationCompleteName);
+            $locationRealName=implode("/", $locationCompleteName);
             $this->children[] = new VigiloGroup($locationRealName);
         }
 
@@ -82,7 +83,7 @@ class VigiloHost extends VigiloXml
         $entity->getFromDB($this->computer->fields["entities_id"]);
         if (!($entity->getName()=='N/A')) {
             $entityCompleteName=explode(" > ", $entity->getField("completename"));
-            $entityRealName="/" . implode("/", $entityCompleteName);
+            $entityRealName=implode("/", $entityCompleteName);
             $this->children[] = new VigiloGroup($entityRealName);
         }
 
@@ -120,11 +121,6 @@ class VigiloHost extends VigiloXml
         }
 
         return $address;
-    }
-
-    protected function monitorProcessor()
-    {
-        $this->children[] = new VigiloTest('CPU');
     }
 
     protected function monitorMemory()
@@ -176,7 +172,6 @@ class VigiloHost extends VigiloXml
             }
             $args[] = new VigiloArg('label', $label);
             $args[] = new VigiloArg('ifname', $port->getName());
-            ;
             $this->children[] = new VigiloTest('Interface', $args);
 
             // Retrieve all IP addresses associated with this interface.

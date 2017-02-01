@@ -15,7 +15,6 @@ function getSoftwareList($computer)
            'elserv'      =>array("addHTTPTest",array()), //HTTP server that runs on Emacsen
            'thin'        =>array("addHTTPTest",array()), //Fast and very simple Ruby web server
            'webdis'      =>array("addHTTPTest",array()), //Web server providing an HTTP interface to Redis
-
            //'ntp'=>array("addNTPTest",array()), //Network Time Protocol deamon and utility programs
 
            'vigilo-connector-metro'     =>array("addVigiloConnectorTest",array("metro")), //Vigilo module receiving and stocking metrology data

@@ -64,7 +64,6 @@ class PluginVigiloMenu extends CommonGLPI
                     echo "ERROR: command timed out!\n";
                     break;
                 }
-
                 if (count($exc)) {
                     echo "UNKNOWN ERROR\n";
                     break;
@@ -73,7 +72,7 @@ class PluginVigiloMenu extends CommonGLPI
                 foreach ($read as $stream){
                     echo htmlspecialchars(fread($stream, 1024), ENT_HTML5 | ENT_QUOTES, "utf-8");
                 };
-                //ob_flush();
+
                 flush();
                 if (feof($pipes[1])){
                   break;

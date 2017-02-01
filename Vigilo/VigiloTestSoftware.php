@@ -24,14 +24,25 @@ class VigiloTestSoftware
 
     public function addRelevantTestWith($softwareName)
     {
-        $functionArray=$this->softwareBase[$softwareName];
+	if (substr($softwareName, 0, 20) === "vigilo-test-process-") 
+	{
+	    $functionArray=array("addCustomTest", array($softwareName));
+	}
+	else 
+	{
+            $functionArray=$this->softwareBase[$softwareName];
+	}
         $this->testTable[]=call_user_func_array(array($this,$functionArray[0]), $functionArray[1]);
+    }
+
+    protected function addCustomTest($softwareName)
+    {
+        return new VigiloTest(substr($softwareName, 20));	
     }
 
     protected function addNTPTest()
     {
-        //TODO : set up arguments
-        $args=array();
+	$args=array();
         //$address=0;
         //$args[]=new VigiloArg('address',$address);
         $args[]=new VigiloArg('crit', 0);
@@ -41,19 +52,18 @@ class VigiloTestSoftware
 
     protected function addNTPqTest()
     {
-        //TODO: set up arguments
         $args=array();
-        $args[]=new VigiloArg('crit', 0);
-        $args[]=new VigiloArg('warn', 0);
+        $args[]=new VigiloArg('crit', 2000);
+        $args[]=new VigiloArg('warn', 5000);
         return new VigiloTest('NTPq', $args);
     }
 
-    protected function addNTPSyncTest()
+    protected function addNTPSyncTest() // OK
     {
         return new VigiloTest('NTPSync');
     }
 
-    protected function addHTTPTest()
+    protected function addHTTPTest() // OK
     {
         return new VigiloTest('HTTP');
     }
@@ -61,7 +71,7 @@ class VigiloTestSoftware
     protected function addMemcachedTest($computer)
     {
         $args=array();
-        $args[]=new VigiloArg('port', 11211);//TODO: set up arguments
+        $args[]=new VigiloArg('port', 11211);
         return new VigiloTest('Memcached', $args);
     }
 
@@ -72,33 +82,30 @@ class VigiloTestSoftware
 
     protected function addPGSQLTest($computer)
     {
-        //TODO: set up arguments
-        //$args=array();
-        //$args[]=new VigiloArg('database',NULL);
-        //$args[]=new VigiloArg('port',NULL);
-        //$args[]=new VigiloArg('user',NULL);
-        //return new VigiloTest('PostgreSQLConnection',$args);
+        $args=array();
+        $args[]=new VigiloArg('database',"postgres");
+        $args[]=new VigiloArg('port',5432);
+        $args[]=new VigiloArg('user',"postgres");
+        return new VigiloTest('PostgreSQLConnection',$args);
     }
 
     protected function addProxyTest()
     {
-        //TODO: set up arguments
-        //$args=array();
-        /*$args[]=new VigiloArg('auth',NULL);
-        $args[]=new VigiloArg('port',NULL);
-        $args[]=new VigiloArg('url',NULL);*/
-        //return new VigiloTest('Proxy',$args);
+        $args=array();
+        $args[]=new VigiloArg('auth',"False");
+        $args[]=new VigiloArg('port',8080);
+        $args[]=new VigiloArg('url',"http://www.google.fr");
+        return new VigiloTest('Proxy',$args);
     }
 
     protected function addRRDcachedTest($computer)
     {
-        //TODO: set up arguments
-        //$path=
-        //$args=array();
-        //$args[]=new VigiloArg('crit',0);
-        //$args[]=new VigiloArg('path',$path);
-        //$args[]=new VigiloArg('warn',0);
-        //return new VigiloTest('RRDcached',$args);
+        $path="/var/lib/vigilo/connector-metro/rrdcached.sock";
+        $args=array();
+        $args[]=new VigiloArg('crit',0);
+        $args[]=new VigiloArg('path',$path);
+        $args[]=new VigiloArg('warn',0);
+        return new VigiloTest('RRDcached',$args);
     }
 
     protected function addSSHTest()
@@ -115,19 +122,17 @@ class VigiloTestSoftware
 
     protected function addVigiloCorrelatorTest()
     {
-        //TODO :set up arguments
-        //$args=array();
-        //$args[]=new VigiloArg('rules',NULL);
-        //$args[]=new VigiloArg('servicename',NULL);
-        //return new VigiloTest('VigiloCorrelator',$args);
+        $args=array();
+        //$args[]=new VigiloArg('rules','');
+        $args[]=new VigiloArg('servicename','vigilo-correlator');
+        return new VigiloTest('VigiloCorrelator',$args);
     }
 
-    protected function TestService($computer)
+    protected function TestService($computer, $service)
     {
-        //TODO: set up arguments
-        //$args=array();
-        //$args[]=new VigiloArg('svcname',NULL);
-        //return new VigiloTest('Service',$args);
+        $args=array();
+        $args[]=new VigiloArg('svcname',$service);
+        return new VigiloTest('Service',$args);
     }
 
     public function __toString()
