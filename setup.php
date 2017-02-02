@@ -21,6 +21,7 @@ function plugin_init_vigilo()
                                                 "Software" => array($hookObj,"manageSoftwares"),
                                                 "Location" => array($hookObj,"updateGroups"),
                                                 "Entity" => array($hookObj,"updateGroups"),
+                                                "Computer_SoftwareVersion" => array($hookObj, "manageComputerSoftwareVersion"),
                                                 "Manufacturer" => array($hookObj,"updateGroups"));
     $hooks['item_update'][$p]           = array("Computer" => array($hookObj, "update"),
                                                 "ComputerDisk" => array($hookObj,"manageDisks"),
@@ -33,6 +34,7 @@ function plugin_init_vigilo()
                                                 "DeviceSoundCard" => array($hookObj,"manageNetworks"),
                                                 "Software" => array($hookObj,"manageSoftwares"),
                                                 "Location" => array($hookObj,"updateGroups"),
+                                                "Computer_SoftwareVersion" => array($hookObj, "manageComputerSoftwareVersion"),
                                                 "Entity" => array($hookObj,"updateGroups"),
                         "Manufacturer" => array($hookObj,"updateGroups"));
     $hooks['item_purge'][$p]            = array("Computer" => array($hookObj, "delete"),
@@ -46,6 +48,7 @@ function plugin_init_vigilo()
                                                 "DeviceSoundCard" => array($hookObj,"manageNetworks"),
                                                 "Software" => array($hookObj,"manageSoftwares"),
                                                 "Location" => array($hookObj,"updateGroups"),
+                                                "Computer_SoftwareVersion" => array($hookObj, "manageComputerSoftwareVersion"),
                                                 "Entity" => array($hookObj,"updateGroups"),
                                                 "Manufacturer" => array($hookObj,"updateGroups"));
     $hooks['item_delete'][$p]           = array("Computer" => array($hookObj, "delete"),
@@ -59,6 +62,7 @@ function plugin_init_vigilo()
                                                 "DeviceSoundCard" => array($hookObj,"manageNetworks"),
                                                 "Software" => array($hookObj,"manageSoftwares"),
                                                 "Location" => array($hookObj,"updateGroups"),
+                                                "Computer_SoftwareVersion" => array($hookObj, "manageComputerSoftwareVersion"),
                                                 "Entity" => array($hookObj,"updateGroups"),
                                                 "Manufacturer" => array($hookObj,"updateGroups"));
     $hooks['item_restore'][$p]          = array("Computer" => array($hookObj, "add"),
@@ -72,6 +76,7 @@ function plugin_init_vigilo()
                                                 "DeviceSoundCard" => array($hookObj,"manageNetworks"),
                                                 "Software" => array($hookObj,"manageSoftwares"),
                                                 "Location" => array($hookObj,"updateGroups"),
+                                                "Computer_SoftwareVersion" => array($hookObj, "manageComputerSoftwareVersion"),
                                                 "Entity" => array($hookObj,"updateGroups"),
                                                 "Manufacturer" => array($hookObj,"updateGroups"));
     $hooks["menu_toadd"][$p]['plugins'] = 'PluginVigiloMenu';

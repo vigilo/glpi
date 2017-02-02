@@ -24,7 +24,7 @@ class VigiloTestSoftware
 
     public function addRelevantTestWith($softwareName)
     {
-	if (substr($softwareName, 0, 20) === "vigilo-test-process-") 
+	if (strstr($softwareName, "vigilo-test"))
 	{
 	    $functionArray=array("addCustomTest", array($softwareName));
 	}
@@ -37,7 +37,17 @@ class VigiloTestSoftware
 
     protected function addCustomTest($softwareName)
     {
-        return new VigiloTest(substr($softwareName, 20));	
+        $software_name = str_replace('vigilo-test-', '', $softwareName);
+        $explode_software_name = explode('-', $software_name, 2);
+        $args=array();
+        switch($explode_software_name[0])
+        {
+            case "process": $args[]=new VigiloArg('processname', $explode_software_name[1]); break;
+            case "service": $args[]=new VigiloArg('svcname', $explode_software_name[1]); break;
+            default: return;
+        }
+
+        return new VigiloTest(ucfirst($explode_software_name[0]), $args);
     }
 
     protected function addNTPTest()
@@ -128,7 +138,7 @@ class VigiloTestSoftware
         return new VigiloTest('VigiloCorrelator',$args);
     }
 
-    protected function TestService($computer, $service)
+    protected function addTestService($computer, $service)
     {
         $args=array();
         $args[]=new VigiloArg('svcname',$service);

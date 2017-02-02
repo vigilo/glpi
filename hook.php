@@ -76,6 +76,14 @@ class VigiloHooks
         unlink(implode(DIRECTORY_SEPARATOR, $dirs));
     }
 
+    public function manageComputerSoftwareVersion($computer_software_version)
+    {
+        global $DB;
+        $computer=new Computer();
+        $computer->getFromDB($computer_software_version->getField("computers_id"));
+        $this->update($computer);
+    }
+
     public function manageSoftwares($software)
     {
         global $DB;
