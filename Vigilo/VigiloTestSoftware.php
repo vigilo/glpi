@@ -30,8 +30,12 @@ class VigiloTestSoftware
 	}
 	else 
 	{
+            if (!array_key_exists($softwareName, $this->softwareBase))
+            {
+                return;
+            }
             $functionArray=$this->softwareBase[$softwareName];
-	}
+        }
         $this->testTable[]=call_user_func_array(array($this,$functionArray[0]), $functionArray[1]);
     }
 
@@ -40,14 +44,24 @@ class VigiloTestSoftware
         $software_name = str_replace('vigilo-test-', '', $softwareName);
         $explode_software_name = explode('-', $software_name, 2);
         $args=array();
-        switch($explode_software_name[0])
+        switch(strtolower($explode_software_name[0]))
         {
-            case "process": $args[]=new VigiloArg('processname', $explode_software_name[1]); break;
-            case "service": $args[]=new VigiloArg('svcname', $explode_software_name[1]); break;
+            case "process":
+                $args[]=new VigiloArg('processname', $explode_software_name[1]);
+                $explode_software_name[0] = "Process";
+                break;
+            case "service":
+                $args[]=new VigiloArg('svcname', $explode_software_name[1]);
+                $explode_software_name[0] = "Service";
+                break;
+            case "tcp":
+                $args[]=new VigiloArg('port', $explode_software_name[1]);
+                $explode_software_name[0] = "TCP";
+                break;
             default: return;
         }
 
-        return new VigiloTest(ucfirst($explode_software_name[0]), $args);
+        return new VigiloTest($explode_software_name[0], $args);
     }
 
     protected function addNTPTest()

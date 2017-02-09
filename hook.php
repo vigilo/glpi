@@ -18,7 +18,10 @@ class VigiloHooks
         $confdir    = implode(DIRECTORY_SEPARATOR, $dirs);
         $file       = $confdir . DIRECTORY_SEPARATOR . "groups.xml";
 
-        mkdir($confdir, 0770, true);
+        if (!file_exists($confdir)) {
+            mkdir($confdir, 0770, true);
+        }
+
         $acc = "";
         foreach ($dirs as $dir) {
             $acc .= DIRECTORY_SEPARATOR . $dir;
@@ -40,7 +43,9 @@ class VigiloHooks
             $confdir    = implode(DIRECTORY_SEPARATOR, $dirs);
             $file     = $confdir . DIRECTORY_SEPARATOR . $host->getName() . ".xml";
 
-            mkdir($confdir, 0770, true);
+            if (!file_exists($confdir)) {
+                mkdir($confdir, 0770, true);
+            }
             $acc = "";
             foreach ($dirs as $dir) {
                 $acc .= DIRECTORY_SEPARATOR . $dir;
@@ -126,7 +131,6 @@ class VigiloHooks
     public function manageNetworks($network)
     {
         global $DB;
-        ;
         $id=$network->getField('items_id');
         $comp=new Computer();
         $comp->getFromDB($id);

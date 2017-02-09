@@ -43,7 +43,7 @@ class VigiloHost extends VigiloXml
         if ($template_name && $template_name !== "N/A") {
             $this->children[] = new VigiloHostTemplate($this->computer->getField("template_name"));
         }
-        $refs = array(
+        /*$refs = array(
             "glpi_operatingsystems" => "operatingsystems_id",
             "glpi_operatingsystemversions" => "operatingsystemversions_id",
             "glpi_operatingsystemservicepacks" => "operatingsystemservicepacks_id",
@@ -66,7 +66,18 @@ class VigiloHost extends VigiloXml
             $model = implode(" - ", $model);
         }
 
-        $this->children[] = new VigiloHostTemplate($model);
+        $this->children[] = new VigiloHostTemplate($model);*/
+
+
+        $template_number = $this->computer->getField("vigilo_template");
+        if ($template_number !== '0') {
+            $common_dbtm = new CommonDBTM();
+            $template_name = $this->computer->getVigiloTemplateName($template_number);
+        }
+        else {
+           $template_name = "default";
+        }
+        $this->children[] = new VigiloHostTemplate($template_name);
     }
 
     protected function selectGroups()

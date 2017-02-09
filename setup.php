@@ -36,7 +36,7 @@ function plugin_init_vigilo()
                                                 "Location" => array($hookObj,"updateGroups"),
                                                 "Computer_SoftwareVersion" => array($hookObj, "manageComputerSoftwareVersion"),
                                                 "Entity" => array($hookObj,"updateGroups"),
-                        "Manufacturer" => array($hookObj,"updateGroups"));
+                                                "Manufacturer" => array($hookObj,"updateGroups"));
     $hooks['item_purge'][$p]            = array("Computer" => array($hookObj, "delete"),
                                                 "ComputerDisk" => array($hookObj,"manageDisks"),
                                                 "NetworkPort" => array($hookObj,"manageNetworks"),
