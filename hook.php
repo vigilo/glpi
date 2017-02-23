@@ -18,10 +18,7 @@ class VigiloHooks
         $confdir    = implode(DIRECTORY_SEPARATOR, $dirs);
         $file       = $confdir . DIRECTORY_SEPARATOR . "groups.xml";
 
-        if (!file_exists($confdir)) {
-            mkdir($confdir, 0770, true);
-        }
-
+        mkdir($confdir, 0770, true);
         $acc = "";
         foreach ($dirs as $dir) {
             $acc .= DIRECTORY_SEPARATOR . $dir;
@@ -38,6 +35,20 @@ class VigiloHooks
     public function add($computer)
     {
         if ($computer->getField("is_template")==0) {
+            global $DB;
+            $template_id = PluginVigiloVigiloTemplate::getVigiloTemplateNameByID($computer->getField("vigilo_template"));
+            
+            if(!empty($template_id)) {
+                $query = "UPDATE glpi_computers
+                          SET vigilo_template = '" . PluginVigiloVigiloTemplate::getVigiloTemplateNameByID($computer->getField("vigilo_template")) .
+                         "' WHERE id = " . $computer->getField("id") . ";";
+                $DB->queryOrDie($query, "update vigilo_template field");
+            }
+    
+            $query = "UPDATE glpi_computers
+                      SET is_dynamic = ' 1
+                      ' WHERE id = " . $computer->getField("id") . ";";
+            $DB->queryOrDie($query, "update vigilo_template field");
             $host       = new VigiloHost($computer);
             $dirs       = array($this->confdir, "hosts", "managed");
             $confdir    = implode(DIRECTORY_SEPARATOR, $dirs);
@@ -67,11 +78,10 @@ class VigiloHooks
 
     public function update($computer)
     {
-	global $PLUGIN_HOOKS;
+	global $PLUGIN_HOOKS, $DB;
         if (isset($computer->oldvalues["name"])) {
             $this->unmonitor($computer->oldvalues["name"]);
         }
-
         $this->add($computer);
     }
 
@@ -86,7 +96,7 @@ class VigiloHooks
         global $DB;
         $computer=new Computer();
         $computer->getFromDB($computer_software_version->getField("computers_id"));
-        $this->update($computer);
+        $this->update($computer);   
     }
 
     public function manageSoftwares($software)
@@ -135,5 +145,19 @@ class VigiloHooks
         $comp=new Computer();
         $comp->getFromDB($id);
         $this->update($comp);
+    }
+
+    public function plugin_vigilo_getAddSearchOptions($itemtype)
+    {
+        $options = array();
+        if ($itemtype == 'Computer' or $itemtype == 'PluginVigiloComputer')
+        {
+            $options['7007']['table']          = 'glpi_computers';
+            $options['7007']['field']          = 'vigilo_template';
+            $options['7007']['name']           = 'vigilo_template';
+            $options['7007']['massiveaction']  = 'TRUE';
+            $options['7007']['datatype']       = 'dropdown';
+            return $options;
+        }
     }
 }

@@ -24,14 +24,13 @@ class VigiloTestSoftware
 
     public function addRelevantTestWith($softwareName)
     {
-	if (strstr($softwareName, "vigilo-test"))
+	if (strstr($softwareName, "vigilo-test")) 
 	{
 	    $functionArray=array("addCustomTest", array($softwareName));
 	}
 	else 
 	{
-            if (!array_key_exists($softwareName, $this->softwareBase))
-            {
+            if (!array_key_exists($softwareName, $this->softwareBase)) {
                 return;
             }
             $functionArray=$this->softwareBase[$softwareName];
@@ -42,26 +41,26 @@ class VigiloTestSoftware
     protected function addCustomTest($softwareName)
     {
         $software_name = str_replace('vigilo-test-', '', $softwareName);
-        $explode_software_name = explode('-', $software_name, 2);
+	$explode_software_name = explode('-', $software_name, 2);
         $args=array();
         switch(strtolower($explode_software_name[0]))
         {
-            case "process":
+            case "process": 
                 $args[]=new VigiloArg('processname', $explode_software_name[1]);
                 $explode_software_name[0] = "Process";
                 break;
-            case "service":
+            case "service": 
                 $args[]=new VigiloArg('svcname', $explode_software_name[1]);
                 $explode_software_name[0] = "Service";
                 break;
-            case "tcp":
-                $args[]=new VigiloArg('port', $explode_software_name[1]);
+            case "tcp": 
+                $args[]=new VigiloArg('port', $explode_software_name[1]); 
                 $explode_software_name[0] = "TCP";
                 break;
             default: return;
         }
 
-        return new VigiloTest($explode_software_name[0], $args);
+        return new VigiloTest($explode_software_name[0], $args);	
     }
 
     protected function addNTPTest()

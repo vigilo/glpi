@@ -67,17 +67,20 @@ class VigiloHost extends VigiloXml
         }
 
         $this->children[] = new VigiloHostTemplate($model);*/
-
+        
 
         $template_number = $this->computer->getField("vigilo_template");
-        if ($template_number !== '0') {
+        if ($template_number !== '0' && $template_number !== 'N/A') {
             $common_dbtm = new CommonDBTM();
-            $template_name = $this->computer->getVigiloTemplateName($template_number);
+            $template_name = PluginVigiloVigiloTemplate::getVigiloTemplateNameByID($template_number);
+            $this->children[] = new VigiloHostTemplate($template_name);
         }
         else {
-           $template_name = "default";
+           if (empty($this->children)) {
+               $template_name = "default";
+               $this->children[] = new VigiloHostTemplate($template_name);
+           }
         }
-        $this->children[] = new VigiloHostTemplate($template_name);
     }
 
     protected function selectGroups()
