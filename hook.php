@@ -37,14 +37,14 @@ class VigiloHooks
         if ($computer->getField("is_template")==0) {
             global $DB;
             $template_id = PluginVigiloVigiloTemplate::getVigiloTemplateNameByID($computer->getField("vigilo_template"));
-            
+
             if(!empty($template_id)) {
                 $query = "UPDATE glpi_computers
                           SET vigilo_template = '" . PluginVigiloVigiloTemplate::getVigiloTemplateNameByID($computer->getField("vigilo_template")) .
                          "' WHERE id = " . $computer->getField("id") . ";";
                 $DB->queryOrDie($query, "update vigilo_template field");
             }
-    
+
             $query = "UPDATE glpi_computers
                       SET is_dynamic = ' 1
                       ' WHERE id = " . $computer->getField("id") . ";";
@@ -96,7 +96,7 @@ class VigiloHooks
         global $DB;
         $computer=new Computer();
         $computer->getFromDB($computer_software_version->getField("computers_id"));
-        $this->update($computer);   
+        $this->update($computer);
     }
 
     public function manageSoftwares($software)

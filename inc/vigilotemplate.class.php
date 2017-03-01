@@ -14,8 +14,10 @@ class PluginVigiloVigiloTemplate extends CommonDBTM {
         foreach($hosttemplates_files as $file) {
             $filepath = $hosttdir . DIRECTORY_SEPARATOR . $file;
             $test_filepath = preg_match("/(.*).xml$/", $filepath);
+
             if (is_file($filepath) AND !empty($test_filepath)) {
                 preg_match_all($pattern, file_get_contents($filepath), $matches);
+
                 foreach ($matches[1] as $match) {
                     $templates[] = $match;
                 }
@@ -25,6 +27,20 @@ class PluginVigiloVigiloTemplate extends CommonDBTM {
         sort($templates, SORT_STRING);
         array_unshift($templates, '-----');
         return $templates;
+    }
+
+    static function getAjaxArrayTemplates() {
+
+        $templates = PluginVigiloVigiloTemplate::getAllTemplates();
+        $id = 0;
+        $ret = array();
+
+        foreach($templates as $t) {
+            $ret[] = array("id" => $id, "text" => $t);
+            $id++;
+        }
+
+        return $ret;
     }
 
     static function getVigiloTemplateNameByID($id) {

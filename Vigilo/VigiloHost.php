@@ -43,31 +43,6 @@ class VigiloHost extends VigiloXml
         if ($template_name && $template_name !== "N/A") {
             $this->children[] = new VigiloHostTemplate($this->computer->getField("template_name"));
         }
-        /*$refs = array(
-            "glpi_operatingsystems" => "operatingsystems_id",
-            "glpi_operatingsystemversions" => "operatingsystemversions_id",
-            "glpi_operatingsystemservicepacks" => "operatingsystemservicepacks_id",
-        );
-
-        $model = array();
-        foreach ($refs as $table => $field) {
-            $id = $this->computer->fields[$field];
-            $value = Dropdown::getDropdownName($table, $id);
-            if ($value !== "" && $value !== null && $value !== "&nbsp;"
-                && $value !== false && $value !== "-----" && $value !== 'N/A'
-            ) {
-                $model[] = $value;
-            }
-        }
-
-        if (!count($model)) {
-            $model = "default";
-        } else {
-            $model = implode(" - ", $model);
-        }
-
-        $this->children[] = new VigiloHostTemplate($model);*/
-        
 
         $template_number = $this->computer->getField("vigilo_template");
         if ($template_number !== '0' && $template_number !== 'N/A') {

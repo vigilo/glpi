@@ -8,16 +8,20 @@ class PluginVigiloComputer extends Computer {
     static function showComputerInfo($item) {
         global $CFG_GLPI;
         $templates = PluginVigiloVigiloTemplate::getAllTemplates();
-        $value = array_search($item->getField('vigilo_template'), $templates);
-        if (empty($value)) {
-           $value = 0;
+        $value = $item->getField('vigilo_template');
+        if ($value === 'NULL') {
+           $value = '-----';
         }
         echo '<table class="tab_cadre_fixe tab_glpi" width="100%">';
         echo '<tr class="tab_bg_1"><th colspan="4">Vigilo Template</th></tr>';
         echo '<tr class="tab_bg_1">';
         echo '<td>Vigilo Template</td>';
         echo '<td>';
-        Dropdown::showFromArray('vigilo_template', $templates, array('value' => $value));
+        Dropdown::show('PluginVigiloComputer', array("name" => "vigilo_template",
+                                                     "emptylabel" => $value,
+                                                     "url" => $CFG_GLPI["root_doc"] . "/plugins/vigilo/ajax/getVTValue.php"));
+        $ret = array();
+        $tmp = PluginVigiloVigiloTemplate::getAllTemplates();
         echo '</td></tr>';
         echo '</table>';
         return TRUE;
