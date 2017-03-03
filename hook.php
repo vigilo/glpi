@@ -32,7 +32,7 @@ class VigiloHooks
         }
     }
 
-    public function add($computer)
+    public function addComputer($computer)
     {
         if ($computer->getField("is_template")==0) {
             global $DB;
@@ -57,10 +57,27 @@ class VigiloHooks
             if (!file_exists($confdir)) {
                 mkdir($confdir, 0770, true);
             }
-            $acc = "";
-            foreach ($dirs as $dir) {
-                $acc .= DIRECTORY_SEPARATOR . $dir;
-                chgrp($acc, "vigiconf");
+
+            $res = file_put_contents($file, $host, LOCK_EX);
+            if ($res !== false) {
+                chgrp($file, "vigiconf");
+                chmod($file, 0660);
+            }
+        }
+    }
+
+    public function addNetworkEquipment($networkequipment)
+    {
+        if ($networkequipment->getField("is_template")==0) {
+            global $DB;
+
+            $host       = new VigiloNetworkEquipment($networkequipment);
+            $dirs       = array($this->confdir, "hosts", "managed");
+            $confdir    = implode(DIRECTORY_SEPARATOR, $dirs);
+            $file       = $confdir . DIRECTORY_SEPARATOR . $host->getName() . ".xml";
+
+            if (!file_exists($confdir)) {
+                mkdir($confdir, 0770, true);
             }
 
             $res = file_put_contents($file, $host, LOCK_EX);
@@ -82,7 +99,18 @@ class VigiloHooks
         if (isset($computer->oldvalues["name"])) {
             $this->unmonitor($computer->oldvalues["name"]);
         }
-        $this->add($computer);
+    }
+
+    public function updateComputer($computer)
+    {
+        $this->update($computer);
+        $this->addComputer($computer);
+    }
+
+    public function updateNetworkEquipment($networkEquipment)
+    {
+        $this->update($networkEquipment);
+        $this->addNetworkEquipment($networkEquipment);
     }
 
     public function unmonitor($host)
@@ -96,7 +124,7 @@ class VigiloHooks
         global $DB;
         $computer=new Computer();
         $computer->getFromDB($computer_software_version->getField("computers_id"));
-        $this->update($computer);
+        $this->updateComputer($computer);
     }
 
     public function manageSoftwares($software)
@@ -113,7 +141,7 @@ class VigiloHooks
                     if ($idComputer['computers_id'] != -1) {
                         $computer=new Computer();
                         $computer->getFromDB($idComputer['computers_id']);
-                        $this->update($computer);
+                        $this->updateComputer($computer);
                     }
                 }
             }
@@ -126,7 +154,7 @@ class VigiloHooks
         $id=$disk->getField('computers_id');
         $computer=new Computer();
         $computer->getFromDB($id);
-        $this->update($computer);
+        $this->updateComputer($computer);
     }
 
     public function manageAddresses($address)
@@ -135,16 +163,24 @@ class VigiloHooks
         $id=$address->getField('mainitems_id');
         $comp=new Computer();
         $comp->getFromDB($id);
-        $this->update($comp);
+        $this->updateComputer($comp);
     }
 
     public function manageNetworks($network)
     {
         global $DB;
         $id=$network->getField('items_id');
-        $comp=new Computer();
-        $comp->getFromDB($id);
-        $this->update($comp);
+        $itemtype = $network->getField('itemtype');
+        if ($itemtype === 'Computer') {
+            $comp=new Computer();
+            $comp->getFromDB($id);
+            $this->updateComputer($comp);
+        }
+        else if ($itemtype === 'NetworkEquipment') {
+            $ne=new NetworkEquipment();
+            $ne->getFromDB($id);
+            $this->updateNetworkEquipment($ne);
+        }
     }
 
     public function plugin_vigilo_getAddSearchOptions($itemtype)

@@ -10,7 +10,8 @@ function plugin_init_vigilo()
     $p          =  "vigilo";
     $hookObj    =  new VigiloHooks();
     $hooks['csrf_compliant'][$p]        = true;
-    $hooks['item_add'][$p]              = array("Computer" => array($hookObj, "add"),
+    $hooks['item_add'][$p]              = array("Computer" => array($hookObj, "addComputer"),
+                                                "NetworkEquipment" => array($hookObj, "addNetworkEquipment"),
                                                 "ComputerDisk" => array($hookObj,"manageDisks"),
                                                 "NetworkPort" => array($hookObj,"manageNetworks"),
                                                 "IPAddress" => array($hookObj,"manageAddresses"),
@@ -24,7 +25,8 @@ function plugin_init_vigilo()
                                                 "Entity" => array($hookObj,"updateGroups"),
                                                 "Computer_SoftwareVersion" => array($hookObj, "manageComputerSoftwareVersion"),
                                                 "Manufacturer" => array($hookObj,"updateGroups"));
-    $hooks['item_update'][$p]           = array("Computer" => array($hookObj, "update"),
+    $hooks['item_update'][$p]           = array("Computer" => array($hookObj, "updateComputer"),
+                                                "NetworkEquipment" => array($hookObj, "updateNetworkEquipment"),
                                                 "ComputerDisk" => array($hookObj,"manageDisks"),
                                                 "NetworkPort" => array($hookObj,"manageNetworks"),
                                                 "IPAddress" => array($hookObj,"manageAddresses"),
@@ -39,6 +41,7 @@ function plugin_init_vigilo()
                                                 "Entity" => array($hookObj,"updateGroups"),
                                                 "Manufacturer" => array($hookObj,"updateGroups"));
     $hooks['item_purge'][$p]            = array("Computer" => array($hookObj, "delete"),
+                                                "NetworkEquipment" => array($hookObj, "delete"),
                                                 "ComputerDisk" => array($hookObj,"manageDisks"),
                                                 "NetworkPort" => array($hookObj,"manageNetworks"),
                                                 "IPAddress" => array($hookObj,"manageAddresses"),
@@ -53,6 +56,7 @@ function plugin_init_vigilo()
                                                 "Entity" => array($hookObj,"updateGroups"),
                                                 "Manufacturer" => array($hookObj,"updateGroups"));
     $hooks['item_delete'][$p]           = array("Computer" => array($hookObj, "delete"),
+                                                "NetworkEquipment" => array($hookObj, "delete"),
                                                 "ComputerDisk" => array($hookObj,"manageDisks"),
                                                 "NetworkPort" => array($hookObj,"manageNetworks"),
                                                 "IPAddress" => array($hookObj,"manageAddresses"),
@@ -66,7 +70,8 @@ function plugin_init_vigilo()
                                                 "Computer_SoftwareVersion" => array($hookObj, "manageComputerSoftwareVersion"),
                                                 "Entity" => array($hookObj,"updateGroups"),
                                                 "Manufacturer" => array($hookObj,"updateGroups"));
-    $hooks['item_restore'][$p]          = array("Computer" => array($hookObj, "add"),
+    $hooks['item_restore'][$p]          = array("Computer" => array($hookObj, "addComputer"),
+                                                "NetworkEquipment" => array($hookObj, "addNetworkEquipment"),
                                                 "ComputerDisk" => array($hookObj,"manageDisks"),
                                                 "NetworkPort" => array($hookObj,"manageNetworks"),
                                                 "IPAddress" => array($hookObj,"manageAddresses"),
