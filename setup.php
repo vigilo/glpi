@@ -12,6 +12,7 @@ function plugin_init_vigilo()
     $hooks['csrf_compliant'][$p]        = true;
     $hooks['item_add'][$p]              = array("Computer" => array($hookObj, "addComputer"),
                                                 "NetworkEquipment" => array($hookObj, "addNetworkEquipment"),
+                                                "Printer" => array($hookObj, "addPrinter"),
                                                 "ComputerDisk" => array($hookObj,"manageDisks"),
                                                 "NetworkPort" => array($hookObj,"manageNetworks"),
                                                 "IPAddress" => array($hookObj,"manageAddresses"),
@@ -27,6 +28,7 @@ function plugin_init_vigilo()
                                                 "Manufacturer" => array($hookObj,"updateGroups"));
     $hooks['item_update'][$p]           = array("Computer" => array($hookObj, "updateComputer"),
                                                 "NetworkEquipment" => array($hookObj, "updateNetworkEquipment"),
+                                                "Printer" => array($hookObj, "updatePrinter"),
                                                 "ComputerDisk" => array($hookObj,"manageDisks"),
                                                 "NetworkPort" => array($hookObj,"manageNetworks"),
                                                 "IPAddress" => array($hookObj,"manageAddresses"),
@@ -42,6 +44,7 @@ function plugin_init_vigilo()
                                                 "Manufacturer" => array($hookObj,"updateGroups"));
     $hooks['item_purge'][$p]            = array("Computer" => array($hookObj, "delete"),
                                                 "NetworkEquipment" => array($hookObj, "delete"),
+                                                "Printer" => array($hookObj, "delete"),
                                                 "ComputerDisk" => array($hookObj,"manageDisks"),
                                                 "NetworkPort" => array($hookObj,"manageNetworks"),
                                                 "IPAddress" => array($hookObj,"manageAddresses"),
@@ -57,6 +60,7 @@ function plugin_init_vigilo()
                                                 "Manufacturer" => array($hookObj,"updateGroups"));
     $hooks['item_delete'][$p]           = array("Computer" => array($hookObj, "delete"),
                                                 "NetworkEquipment" => array($hookObj, "delete"),
+                                                "Printer" => array($hookObj, "delete"),
                                                 "ComputerDisk" => array($hookObj,"manageDisks"),
                                                 "NetworkPort" => array($hookObj,"manageNetworks"),
                                                 "IPAddress" => array($hookObj,"manageAddresses"),
@@ -72,6 +76,7 @@ function plugin_init_vigilo()
                                                 "Manufacturer" => array($hookObj,"updateGroups"));
     $hooks['item_restore'][$p]          = array("Computer" => array($hookObj, "addComputer"),
                                                 "NetworkEquipment" => array($hookObj, "addNetworkEquipment"),
+                                                "Printer" => array($hookObj, "addPrinter"),
                                                 "ComputerDisk" => array($hookObj,"manageDisks"),
                                                 "NetworkPort" => array($hookObj,"manageNetworks"),
                                                 "IPAddress" => array($hookObj,"manageAddresses"),

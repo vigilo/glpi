@@ -11,18 +11,14 @@ class VigiloHooks
         $this->confdir = $confdir;
     }
 
-    public function updateGroups()
+    public function saveHost($host, $dir_type)
     {
-        $host       = new VigiloLocation();
-        $dirs       = array($this->confdir, "groups", "managed");
+        $dirs       = array($this->confdir, $dir_type, "managed");
         $confdir    = implode(DIRECTORY_SEPARATOR, $dirs);
-        $file       = $confdir . DIRECTORY_SEPARATOR . "groups.xml";
+        $file       = $confdir . DIRECTORY_SEPARATOR . $host->getName() . ".xml";
 
-        mkdir($confdir, 0770, true);
-        $acc = "";
-        foreach ($dirs as $dir) {
-            $acc .= DIRECTORY_SEPARATOR . $dir;
-            chgrp($acc, "vigiconf");
+        if (!file_exists($confdir)) {
+            mkdir($confdir, 0770, true);
         }
 
         $res = file_put_contents($file, $host, LOCK_EX);
@@ -30,6 +26,12 @@ class VigiloHooks
             chgrp($file, "vigiconf");
             chmod($file, 0660);
         }
+    }
+
+    public function updateGroups()
+    {
+        $host       = new VigiloLocation();
+        $this->saveHost($host, "groups");
     }
 
     public function addComputer($computer)
@@ -49,20 +51,9 @@ class VigiloHooks
                       SET is_dynamic = ' 1
                       ' WHERE id = " . $computer->getField("id") . ";";
             $DB->queryOrDie($query, "update vigilo_template field");
-            $host       = new VigiloHost($computer);
-            $dirs       = array($this->confdir, "hosts", "managed");
-            $confdir    = implode(DIRECTORY_SEPARATOR, $dirs);
-            $file     = $confdir . DIRECTORY_SEPARATOR . $host->getName() . ".xml";
 
-            if (!file_exists($confdir)) {
-                mkdir($confdir, 0770, true);
-            }
-
-            $res = file_put_contents($file, $host, LOCK_EX);
-            if ($res !== false) {
-                chgrp($file, "vigiconf");
-                chmod($file, 0660);
-            }
+            $host = new VigiloHost($computer);
+            $this->saveHost($host, "hosts");
         }
     }
 
@@ -71,20 +62,18 @@ class VigiloHooks
         if ($networkequipment->getField("is_template")==0) {
             global $DB;
 
-            $host       = new VigiloNetworkEquipment($networkequipment);
-            $dirs       = array($this->confdir, "hosts", "managed");
-            $confdir    = implode(DIRECTORY_SEPARATOR, $dirs);
-            $file       = $confdir . DIRECTORY_SEPARATOR . $host->getName() . ".xml";
+            $host = new VigiloNetworkEquipment($networkequipment);
+            $this->saveHost($host, "hosts");
+        }
+    }
 
-            if (!file_exists($confdir)) {
-                mkdir($confdir, 0770, true);
-            }
+    public function addPrinter($printer)
+    {
+        if ($printer->getField("is_template")==0) {
+            global $DB;
 
-            $res = file_put_contents($file, $host, LOCK_EX);
-            if ($res !== false) {
-                chgrp($file, "vigiconf");
-                chmod($file, 0660);
-            }
+            $host = new VigiloPrinter($printer);
+            $this->saveHost($host, "hosts");
         }
     }
 
@@ -113,10 +102,20 @@ class VigiloHooks
         $this->addNetworkEquipment($networkEquipment);
     }
 
+    public function updatePrinter($printer)
+    {
+        $this->update($printer);
+        $this->addPrinter($printer);
+    }
+
     public function unmonitor($host)
     {
         $dirs = array($this->confdir, "hosts", "managed", $host . ".xml");
-        unlink(implode(DIRECTORY_SEPARATOR, $dirs));
+        $filename = implode(DIRECTORY_SEPARATOR, $dirs);
+        if (file_exists($filename))
+        {
+            unlink($filename);
+        }
     }
 
     public function manageComputerSoftwareVersion($computer_software_version)
@@ -180,6 +179,11 @@ class VigiloHooks
             $ne=new NetworkEquipment();
             $ne->getFromDB($id);
             $this->updateNetworkEquipment($ne);
+        }
+        else if ($itemtype === 'Printer') {
+            $printer=new Printer();
+            $printer->getFromDB($id);
+            $this->updatePrinter($printer);
         }
     }
 
