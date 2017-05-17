@@ -35,9 +35,9 @@ class VigiloPrinter extends VigiloXml
 
     protected function selectTemplates()
     {
-	$template_name = $this->network->getField("template_name");
+        $template_name = $this->network->getField("template_name");
 
-        if ($template_name && $template_name !== "N/A") {
+        if ($template_name !== "N/A") {
             $this->children[] = new VigiloHostTemplate($this->network->getField("template_name"));
         }
     }

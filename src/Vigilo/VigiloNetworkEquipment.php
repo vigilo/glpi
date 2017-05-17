@@ -12,7 +12,7 @@ class VigiloNetworkEquipment extends VigiloXml
     {
         $this->agent        = null;
         $this->ventilation  = "Servers";
-        $this->network     = $network;
+        $this->network      = $network;
         $this->addresses    = array();
         $this->children     = array();
 
@@ -35,9 +35,9 @@ class VigiloNetworkEquipment extends VigiloXml
 
     protected function selectTemplates()
     {
-	$template_name = $this->network->getField("template_name");
+        $template_name = $this->network->getField("template_name");
 
-        if ($template_name && $template_name !== "N/A") {
+        if ($template_name !== "N/A") {
             $this->children[] = new VigiloHostTemplate($this->network->getField("template_name"));
         }
     }

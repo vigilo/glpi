@@ -1,21 +1,19 @@
 <?php
 
-if (!defined('GLPI_ROOT')) {
-    die("Sorry. You can't access directly to this file");
-}
-
-class PluginVigiloVigiloTemplate extends CommonDBTM {
-    static function getAllTemplates() {
+class PluginVigiloVigiloTemplate extends CommonDBTM
+{
+    public static function getAllTemplates()
+    {
         $hosttdir = "/etc/vigilo/vigiconf/conf.d/hosttemplates";
         $hosttemplates_files = scandir($hosttdir);
         $templates = array();
         $pattern = "<template name=\"(\w*)\">";
 
-        foreach($hosttemplates_files as $file) {
+        foreach ($hosttemplates_files as $file) {
             $filepath = $hosttdir . DIRECTORY_SEPARATOR . $file;
             $test_filepath = preg_match("/(.*).xml$/", $filepath);
 
-            if (is_file($filepath) AND !empty($test_filepath)) {
+            if (is_file($filepath) && !empty($test_filepath)) {
                 preg_match_all($pattern, file_get_contents($filepath), $matches);
 
                 foreach ($matches[1] as $match) {
@@ -29,13 +27,13 @@ class PluginVigiloVigiloTemplate extends CommonDBTM {
         return $templates;
     }
 
-    static function getAjaxArrayTemplates() {
-
+    public static function getAjaxArrayTemplates()
+    {
         $templates = PluginVigiloVigiloTemplate::getAllTemplates();
         $id = 0;
         $ret = array();
 
-        foreach($templates as $t) {
+        foreach ($templates as $t) {
             $ret[] = array("id" => $id, "text" => $t);
             $id++;
         }
@@ -43,10 +41,12 @@ class PluginVigiloVigiloTemplate extends CommonDBTM {
         return $ret;
     }
 
-    static function getVigiloTemplateNameByID($id) {
-
+    public static function getVigiloTemplateNameByID($id)
+    {
         if (is_numeric($id)) {
-            if ($id === '0') return "NULL";
+            if ($id === '0') {
+                return "NULL";
+            }
             $templates = PluginVigiloVigiloTemplate::getAllTemplates();
             return $templates[$id];
         }

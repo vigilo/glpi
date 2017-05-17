@@ -38,7 +38,7 @@ class VigiloHost extends VigiloXml
 
     protected function selectTemplates()
     {
-	$template_name = $this->computer->getField("template_name");
+        $template_name = $this->computer->getField("template_name");
 
         if ($template_name && $template_name !== "N/A") {
             $this->children[] = new VigiloHostTemplate($this->computer->getField("template_name"));
@@ -49,12 +49,9 @@ class VigiloHost extends VigiloXml
             $common_dbtm = new CommonDBTM();
             $template_name = PluginVigiloVigiloTemplate::getVigiloTemplateNameByID($template_number);
             $this->children[] = new VigiloHostTemplate($template_name);
-        }
-        else {
-           if (empty($this->children)) {
-               $template_name = "default";
-               $this->children[] = new VigiloHostTemplate($template_name);
-           }
+        } elseif (empty($this->children)) {
+            $template_name = "default";
+            $this->children[] = new VigiloHostTemplate($template_name);
         }
     }
 
@@ -62,7 +59,7 @@ class VigiloHost extends VigiloXml
     {
         $location = new Location();
         $location->getFromDB($this->computer->fields["locations_id"]);
-        if (!($location->getName()=='N/A')) {
+        if (!($location->getName() == 'N/A')) {
             $locationCompleteName=explode(" > ", $location->getField("completename"));
             $locationRealName=implode("/", $locationCompleteName);
             $this->children[] = new VigiloGroup($locationRealName);
@@ -70,7 +67,7 @@ class VigiloHost extends VigiloXml
 
         $entity = new Entity();
         $entity->getFromDB($this->computer->fields["entities_id"]);
-        if (!($entity->getName()=='N/A')) {
+        if (!($entity->getName() == 'N/A')) {
             $entityCompleteName=explode(" > ", $entity->getField("completename"));
             $entityRealName=implode("/", $entityCompleteName);
             $this->children[] = new VigiloGroup($entityRealName);
@@ -78,7 +75,7 @@ class VigiloHost extends VigiloXml
 
         $manufacturer = new Manufacturer();
         $manufacturer->getFromDB($this->computer->fields["manufacturers_id"]);
-        if (!($manufacturer->getName()=='N/A')) {
+        if (!($manufacturer->getName() == 'N/A')) {
             $this->children[] = new VigiloGroup($manufacturer->getName());
         }
     }

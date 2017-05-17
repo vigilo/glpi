@@ -1,10 +1,5 @@
 <?php
 
-if (!defined('GLPI_ROOT')) {
-    die("Sorry. You can't access directly to this file");
-}
-
-
 class PluginVigiloMenu extends CommonGLPI
 {
     const TIMEOUT = 30;
@@ -14,31 +9,38 @@ class PluginVigiloMenu extends CommonGLPI
      *
      * @param $nb  integer  number of item in the type (default 0)
     **/
-    static function getTypeName($nb=0) {
+    public static function getTypeName($nb = 0)
+    {
         return 'Vigilo';
     }
 
-    static function canView() {
+    public static function canView()
+    {
         return true;
     }
 
-    static function canCreate() {
+    public static function canCreate()
+    {
         return false;
     }
 
-    static function getMenuName() {
+    public static function getMenuName()
+    {
         return self::getTypeName();
     }
 
-    static function getAdditionalMenuOptions() {
+    public static function getAdditionalMenuOptions()
+    {
         return array();
     }
 
-    static function getAdditionalMenuContent() {
+    public static function getAdditionalMenuContent()
+    {
         return array();
     }
 
-    static function displayMenu($res, $pipes) {
+    public static function displayMenu($res, $pipes)
+    {
         echo '<h1>Vigilo</h1><form method="post" action="?itemtype=vigilo">';
 
         if (is_resource($res)) {
@@ -54,7 +56,7 @@ class PluginVigiloMenu extends CommonGLPI
                 $nb = stream_select($read, $write, $exc, static::TIMEOUT, 0);
 
                 // Error
-                if ($nb === FALSE) {
+                if ($nb === false) {
                     echo "UNKNOWN ERROR\n";
                     break;
                 }
@@ -69,13 +71,13 @@ class PluginVigiloMenu extends CommonGLPI
                     break;
                 }
 
-                foreach ($read as $stream){
+                foreach ($read as $stream) {
                     echo htmlspecialchars(fread($stream, 1024), ENT_HTML5 | ENT_QUOTES, "utf-8");
                 };
 
                 flush();
-                if (feof($pipes[1])){
-                  break;
+                if (feof($pipes[1])) {
+                    break;
                 }
             } while (1);
 
@@ -83,10 +85,12 @@ class PluginVigiloMenu extends CommonGLPI
             if ($info === false) {
                 echo "ERROR: could not determine process status\n";
             } else {
-                if ($info["signaled"])
+                if ($info["signaled"]) {
                     echo "Command terminated by signal ${info['termsig']}\n";
-                if ($info["stopped"])
+                }
+                if ($info["stopped"]) {
                     echo "Command stopped by signal ${info['stopsig']}\n";
+                }
                 echo "Command exited with return code ${info['exitcode']}\n";
             }
 
