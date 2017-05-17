@@ -1,6 +1,6 @@
 <?php
 
-require __DIR__ . "/hook.php";
+require(__DIR__ . DIRECTORY_SEPARATOR . "hook.php");
 
 function plugin_init_vigilo()
 {

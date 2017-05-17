@@ -1,6 +1,7 @@
 <?php
 
 require __DIR__ . DIRECTORY_SEPARATOR .'autoloader.php';
+
 class VigiloHooks
 {
     private $confdir;

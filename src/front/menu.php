@@ -1,6 +1,8 @@
 <?php
 
-include ("../../../inc/includes.php");
+include(dirname(dirname(__DIR__)) .
+        DIRECTORY_SEPARATOR . "inc" .
+        DIRECTORY_SEPARATOR . "includes.php");
 
 if (PluginVigiloMenu::canView()) {
     Html::header(__('Vigilo', 'vigilo'), $_SERVER["PHP_SELF"], "plugins",
@@ -14,10 +16,10 @@ if (PluginVigiloMenu::canView()) {
             1 => array("pipe", "w"),
             2 => array("pipe", "w"),
         );
-	$cmd = "/usr/bin/sudo -n /usr/bin/vigiconf deploy -f --debug";
+        $cmd = "/usr/bin/sudo -n /usr/bin/vigiconf deploy -f --debug";
         $res = proc_open($cmd, $fds, $pipes);
         if (!is_resource($res))
-	    $res = false;
+            $res = false;
     }
     PluginVigiloMenu::displayMenu($res, $pipes);
 } else {

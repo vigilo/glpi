@@ -1,7 +1,10 @@
 <?php
 
 if (strpos(filter_input(INPUT_SERVER, "PHP_SELF"), "getVTValue.php")) {
-   include ("../../../inc/includes.php");
+  include(dirname(dirname(__DIR__)) .
+          DIRECTORY_SEPARATOR . "inc" .
+          DIRECTORY_SEPARATOR . "includes.php");
+
    header("Content-Type: text/html; charset=UTF-8");
    Html::header_nocache();
 }
