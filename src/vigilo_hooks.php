@@ -6,7 +6,6 @@ class VigiloHooks
 
     public function __construct($confdir = "/etc/vigilo/vigiconf/conf.d")
     {
-        spl_autoload_register('vigilo_autoloader');
         $this->confdir = $confdir;
     }
 
