@@ -148,7 +148,7 @@ class VigiloHost extends VigiloXml
             }
 
             $args       = array();
-            $label      = isset($port->fields['comment']) ? $port->fields['comment'] : $port->getName();
+            $label      = !empty($port->fields['comment']) ? $port->fields['comment'] : $port->getName();
             $ethport    = $ethport->find('networkports_id=' . $np['id']);
             foreach ($ethport as $rowEthPort) {
                 if ($rowEthPort['speed']) {
