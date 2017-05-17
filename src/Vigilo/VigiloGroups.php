@@ -3,12 +3,12 @@
 class VigiloGroups extends VigiloXml
 {
     protected $name;
-    protected $grps;
+    protected $groups;
 
     public function __construct($name)
     {
-        $this->name = $name;
-        $this->grps=array();
+        $this->name     = $name;
+        $this->groups   = array();
     }
     
     public function getName()
@@ -18,7 +18,7 @@ class VigiloGroups extends VigiloXml
 
     public function addSubGroup(VigiloGroups $subGroup)
     {
-        $this->grps[$subGroup->getName()] = $subGroup;
+        $this->groups[$subGroup->getName()] = $subGroup;
     }
 
     public function __toString()
@@ -26,7 +26,7 @@ class VigiloGroups extends VigiloXml
         return self::sprintf(
             '<group name="%s">%s</group>',
             $this->name,
-            $this->grps
+            $this->groups
         );
     }
 }

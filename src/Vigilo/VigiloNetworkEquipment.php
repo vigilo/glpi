@@ -46,23 +46,23 @@ class VigiloNetworkEquipment extends VigiloXml
     {
         $location = new Location();
         $location->getFromDB($this->network->fields["locations_id"]);
-        if (!($location->getName()=='N/A')) {
-            $locationCompleteName=explode(" > ", $location->getField("completename"));
-            $locationRealName=implode("/", $locationCompleteName);
-            $this->children[] = new VigiloGroup($locationRealName);
+        if ('N/A' !== $location->getName()) {
+            $locationCompleteName   = explode(" > ", $location->getField("completename"));
+            $locationRealName       = implode("/", $locationCompleteName);
+            $this->children[]       = new VigiloGroup($locationRealName);
         }
 
         $entity = new Entity();
         $entity->getFromDB($this->network->fields["entities_id"]);
-        if (!($entity->getName()=='N/A')) {
-            $entityCompleteName=explode(" > ", $entity->getField("completename"));
-            $entityRealName=implode("/", $entityCompleteName);
-            $this->children[] = new VigiloGroup($entityRealName);
+        if ('N/A' !== $entity->getName()) {
+            $entityCompleteName = explode(" > ", $entity->getField("completename"));
+            $entityRealName     = implode("/", $entityCompleteName);
+            $this->children[]   = new VigiloGroup($entityRealName);
         }
 
         $manufacturer = new Manufacturer();
         $manufacturer->getFromDB($this->network->fields["manufacturers_id"]);
-        if (!($manufacturer->getName()=='N/A')) {
+        if ('N/A' !== $manufacturer->getName()) {
             $this->children[] = new VigiloGroup($manufacturer->getName());
         }
     }
@@ -105,17 +105,17 @@ class VigiloNetworkEquipment extends VigiloXml
         );
 
         foreach ($DB->query($query) as $np) {
-            $query2 = NetworkName::getSQLRequestToSearchForItem("NetworkPort", $np['id']);
-            $port = new NetworkPort();
-            $ethport = new NetworkPortEthernet();
+            $query2     = NetworkName::getSQLRequestToSearchForItem("NetworkPort", $np['id']);
+            $port       = new NetworkPort();
+            $ethport    = new NetworkPortEthernet();
             $port->getFromDB($np['id']);
             if ($port->getName() == 'lo') {
                 continue;
             }
 
-            $args   = array();
-            $label  = isset($port->fields['comment']) ? $port->fields['comment'] : $port->getName();
-            $ethport = $ethport->find('networkports_id=' . $np['id']);
+            $args       = array();
+            $label      = isset($port->fields['comment']) ? $port->fields['comment'] : $port->getName();
+            $ethport    = $ethport->find('networkports_id=' . $np['id']);
             foreach ($ethport as $rowEthPort) {
                 if ($rowEthPort['speed']) {
                     $args[] = new VigiloArg('max', $rowEthPort['speed']);
@@ -143,9 +143,9 @@ class VigiloNetworkEquipment extends VigiloXml
 
     public function __toString()
     {
-        $outXML=new DOMdocument();
-        $outXML->preserveWhiteSpace=false;
-        $outXML->formatOutput=true;
+        $outXML = new DOMDocument();
+        $outXML->preserveWhiteSpace = false;
+        $outXML->formatOutput       = true;
         $outXML->loadXML(
             self::sprintf(
                 '<?xml version="1.0"?>' .

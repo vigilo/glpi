@@ -9,10 +9,10 @@ class VigiloTestSoftware
 
     public function __construct($computer)
     {
-        $this->computer=$computer;
+        $this->computer     = $computer;
         $this->softwareBase = getSoftwareList($this->computer);
-        $this->testTable=array();
-        $this->addedTests=array();
+        $this->testTable    = array();
+        $this->addedTests   = array();
     }
 
     public function getTable()
@@ -74,7 +74,7 @@ class VigiloTestSoftware
 
     protected function addNTPqTest()
     {
-        $args=array();
+        $args = array();
         $args[] = new VigiloArg('crit', 2000);
         $args[] = new VigiloArg('warn', 5000);
         return new VigiloTest('NTPq', $args);
@@ -92,7 +92,7 @@ class VigiloTestSoftware
 
     protected function addMemcachedTest($computer)
     {
-        $args=array();
+        $args = array();
         $args[] = new VigiloArg('port', 11211);
         return new VigiloTest('Memcached', $args);
     }
@@ -104,7 +104,7 @@ class VigiloTestSoftware
 
     protected function addPGSQLTest($computer)
     {
-        $args=array();
+        $args = array();
         $args[] = new VigiloArg('database', "postgres");
         $args[] = new VigiloArg('port', 5432);
         $args[] = new VigiloArg('user', "postgres");
@@ -113,7 +113,7 @@ class VigiloTestSoftware
 
     protected function addProxyTest()
     {
-        $args=array();
+        $args = array();
         $args[] = new VigiloArg('auth', "False");
         $args[] = new VigiloArg('port', 8080);
         $args[] = new VigiloArg('url', "http://www.google.fr");
@@ -122,8 +122,8 @@ class VigiloTestSoftware
 
     protected function addRRDcachedTest($computer)
     {
-        $path="/var/lib/vigilo/connector-metro/rrdcached.sock";
-        $args=array();
+        $path = "/var/lib/vigilo/connector-metro/rrdcached.sock";
+        $args = array();
         $args[] = new VigiloArg('crit', 0);
         $args[] = new VigiloArg('path', $path);
         $args[] = new VigiloArg('warn', 0);
@@ -137,14 +137,14 @@ class VigiloTestSoftware
 
     protected function addVigiloConnectorTest($type)
     {
-        $args=array();
+        $args = array();
         $args[] = new VigiloArg('type', $type);
         return new VigiloTest('VigiloConnector', $args);
     }
 
     protected function addVigiloCorrelatorTest()
     {
-        $args=array();
+        $args = array();
         //$args[] = new VigiloArg('rules', '');
         $args[] = new VigiloArg('servicename', 'vigilo-correlator');
         return new VigiloTest('VigiloCorrelator', $args);
@@ -152,7 +152,7 @@ class VigiloTestSoftware
 
     protected function addTestService($computer, $service)
     {
-        $args=array();
+        $args = array();
         $args[] = new VigiloArg('svcname', $service);
         return new VigiloTest('Service', $args);
     }

@@ -46,23 +46,23 @@ class VigiloPrinter extends VigiloXml
     {
         $location = new Location();
         $location->getFromDB($this->network->fields["locations_id"]);
-        if (!($location->getName()=='N/A')) {
-            $locationCompleteName=explode(" > ", $location->getField("completename"));
-            $locationRealName=implode("/", $locationCompleteName);
-            $this->children[] = new VigiloGroup($locationRealName);
+        if ('N/A' !== $location->getName()) {
+            $locationCompleteName   = explode(" > ", $location->getField("completename"));
+            $locationRealName       = implode("/", $locationCompleteName);
+            $this->children[]       = new VigiloGroup($locationRealName);
         }
 
         $entity = new Entity();
         $entity->getFromDB($this->network->fields["entities_id"]);
-        if (!($entity->getName()=='N/A')) {
-            $entityCompleteName=explode(" > ", $entity->getField("completename"));
-            $entityRealName=implode("/", $entityCompleteName);
-            $this->children[] = new VigiloGroup($entityRealName);
+        if ('N/A' !== $entity->getName()) {
+            $entityCompleteName = explode(" > ", $entity->getField("completename"));
+            $entityRealName     = implode("/", $entityCompleteName);
+            $this->children[]   = new VigiloGroup($entityRealName);
         }
 
         $manufacturer = new Manufacturer();
         $manufacturer->getFromDB($this->network->fields["manufacturers_id"]);
-        if (!($manufacturer->getName()=='N/A')) {
+        if ('N/A' !== $manufacturer->getName()) {
             $this->children[] = new VigiloGroup($manufacturer->getName());
         }
     }
@@ -71,14 +71,14 @@ class VigiloPrinter extends VigiloXml
     {
         static $address = null;
 
-        if ($address === null && $this->agent) {
+        if (null === $address && $this->agent) {
             $addresses = $this->agent->getIPs();
             if (count($addresses)) {
                 $address = current($addresses);
             }
         }
 
-        if ($address === null) {
+        if (null === $address) {
             $address = $this->network->getName();
             foreach ($this->addresses as $addr) {
                 if (!$addr->is_ipv4()) {
@@ -113,9 +113,9 @@ class VigiloPrinter extends VigiloXml
                 continue;
             }
 
-            $args   = array();
-            $label  = isset($port->fields['comment']) ? $port->fields['comment'] : $port->getName();
-            $ethport = $ethport->find('networkports_id=' . $np['id']);
+            $args       = array();
+            $label      = isset($port->fields['comment']) ? $port->fields['comment'] : $port->getName();
+            $ethport    = $ethport->find('networkports_id=' . $np['id']);
             foreach ($ethport as $rowEthPort) {
                 if ($rowEthPort['speed']) {
                     $args[] = new VigiloArg('max', $rowEthPort['speed']);
@@ -143,9 +143,9 @@ class VigiloPrinter extends VigiloXml
 
     public function __toString()
     {
-        $outXML=new DOMdocument();
-        $outXML->preserveWhiteSpace=false;
-        $outXML->formatOutput=true;
+        $outXML = new DOMDocument();
+        $outXML->preserveWhiteSpace = false;
+        $outXML->formatOutput       = true;
         $outXML->loadXML(
             self::sprintf(
                 '<?xml version="1.0"?>' .

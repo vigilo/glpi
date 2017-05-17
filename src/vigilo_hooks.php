@@ -21,7 +21,7 @@ class VigiloHooks
         }
 
         $res = file_put_contents($file, $host, LOCK_EX);
-        if ($res !== false) {
+        if (false !== $res) {
             chgrp($file, "vigiconf");
             chmod($file, 0660);
         }
@@ -37,7 +37,7 @@ class VigiloHooks
     {
         global $DB;
 
-        if ($computer->getField("is_template") == 0) {
+        if (!$computer->getField("is_template")) {
             $template_id = PluginVigiloVigiloTemplate::getVigiloTemplateNameByID(
                 $computer->getField("vigilo_template")
             );
@@ -61,9 +61,7 @@ class VigiloHooks
 
     public function addNetworkEquipment($networkequipment)
     {
-        if ($networkequipment->getField("is_template") == 0) {
-            global $DB;
-
+        if (!$networkequipment->getField("is_template")) {
             $host = new VigiloNetworkEquipment($networkequipment);
             $this->saveHost($host, "hosts");
         }
@@ -71,9 +69,7 @@ class VigiloHooks
 
     public function addPrinter($printer)
     {
-        if ($printer->getField("is_template") == 0) {
-            global $DB;
-
+        if (!$printer->getField("is_template")) {
             $host = new VigiloPrinter($printer);
             $this->saveHost($host, "hosts");
         }
@@ -86,7 +82,6 @@ class VigiloHooks
 
     public function update($computer)
     {
-        global $PLUGIN_HOOKS, $DB;
         if (isset($computer->oldvalues["name"])) {
             $this->unmonitor($computer->oldvalues["name"]);
         }
@@ -121,45 +116,46 @@ class VigiloHooks
 
     public function manageComputerSoftwareVersion($computer_software_version)
     {
-        global $DB;
-        $computer=new Computer();
+        $computer = new Computer();
         $computer->getFromDB($computer_software_version->getField("computers_id"));
         $this->updateComputer($computer);
     }
 
     public function manageSoftwares($software)
     {
-        global $DB;
-        $softwareVer=new SoftwareVersion();
-        $idSoftwareVersion=$softwareVer->find('softwares_id=' . $software->getID());
+        $softwareVer = new SoftwareVersion();
+        $idSoftwareVersion = $softwareVer->find('softwares_id=' . $software->getID());
         foreach ($idSoftwareVersion as $idVersion) {
-            if ($idVersion['id']) {
-                $computerVer=new Computer_SoftwareVersion();
-                $goodField='softwareversions_id=' . $idVersion['id'];
-                $updateComp=$computerVer->find($goodField);
-                foreach ($updateComp as $idComputer) {
-                    if ($idComputer['computers_id'] != -1) {
-                        $computer=new Computer();
-                        $computer->getFromDB($idComputer['computers_id']);
-                        $this->updateComputer($computer);
-                    }
+            if (!$idVersion['id']) {
+                continue;
+            }
+
+            $computerVer = new Computer_SoftwareVersion();
+            $goodField   = 'softwareversions_id=' . $idVersion['id'];
+            $updateComp  = $computerVer->find($goodField);
+
+            foreach ($updateComp as $idComputer) {
+                if (-1 === $idComputer['computers_id']) {
+                    continue;
                 }
+
+                $computer = new Computer();
+                $computer->getFromDB($idComputer['computers_id']);
+                $this->updateComputer($computer);
             }
         }
     }
 
     public function manageDisks($disk)
     {
-        global $DB;
-        $id=$disk->getField('computers_id');
-        $computer=new Computer();
+        $id = $disk->getField('computers_id');
+        $computer = new Computer();
         $computer->getFromDB($id);
         $this->updateComputer($computer);
     }
 
     public function manageAddresses($address)
     {
-        global $DB;
         $id = $address->getField('mainitems_id');
         $comp = new Computer();
         $comp->getFromDB($id);
@@ -168,7 +164,6 @@ class VigiloHooks
 
     public function manageNetworks($network)
     {
-        global $DB;
         $id = $network->getField('items_id');
         $itemtype = $network->getField('itemtype');
         if ($itemtype === 'Computer') {
@@ -192,6 +187,7 @@ class VigiloHooks
         // Le nom de la méthode est imposé par GLPI.
         // @codingStandardsIgnoreEnd
         $options = array();
+
         if ($itemtype == 'Computer' || $itemtype == 'PluginVigiloComputer') {
             $options['7007']['table']          = 'glpi_computers';
             $options['7007']['field']          = 'vigilo_template';
@@ -199,6 +195,7 @@ class VigiloHooks
             $options['7007']['massiveaction']  = 'TRUE';
             $options['7007']['datatype']       = 'dropdown';
         }
+
         return $options;
     }
 }

@@ -20,15 +20,14 @@ class VigiloArg extends VigiloXml
             }
             $values = $new_values;
         } elseif (!is_string($values) && !is_int($values)
-            && !is_bool($values) && !is_float($values)
-        ) {
+            && !is_bool($values) && !is_float($values)) {
             throw new \RuntimeException();
         } else {
             $values = (string) $values;
         }
 
-        $this->name = $name;
-        $this->values = $values;
+        $this->name     = $name;
+        $this->values   = $values;
     }
 
     public function getName()

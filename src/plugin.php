@@ -5,25 +5,25 @@ function plugin_init_vigilo()
     global $PLUGIN_HOOKS;
     global $DB;
     $hooks      =& $PLUGIN_HOOKS;
-    $p          =  "vigilo";
-    $hookObj    =  new VigiloHooks();
+    $p          = "vigilo";
+    $hookObj    = new VigiloHooks();
 
-    $hooks['csrf_compliant'][$p]        = true;
-    $hooks['item_add'][$p]              = array("Computer" => array($hookObj, "addComputer"),
-                                                "NetworkEquipment" => array($hookObj, "addNetworkEquipment"),
-                                                "Printer" => array($hookObj, "addPrinter"));
-    $hooks['item_update'][$p]           = array("Computer" => array($hookObj, "updateComputer"),
-                                                "NetworkEquipment" => array($hookObj, "updateNetworkEquipment"),
-                                                "Printer" => array($hookObj, "updatePrinter"));
-    $hooks['item_purge'][$p]            = array("Computer" => array($hookObj, "delete"),
-                                                "NetworkEquipment" => array($hookObj, "delete"),
-                                                "Printer" => array($hookObj, "delete"));
-    $hooks['item_delete'][$p]           = array("Computer" => array($hookObj, "delete"),
-                                                "NetworkEquipment" => array($hookObj, "delete"),
-                                                "Printer" => array($hookObj, "delete"));
-    $hooks['item_restore'][$p]          = array("Computer" => array($hookObj, "addComputer"),
-                                                "NetworkEquipment" => array($hookObj, "addNetworkEquipment"),
-                                                "Printer" => array($hookObj, "addPrinter"));
+    $hooks['csrf_compliant'][$p]    = true;
+    $hooks['item_add'][$p]          = array("Computer" => array($hookObj, "addComputer"),
+                                            "NetworkEquipment" => array($hookObj, "addNetworkEquipment"),
+                                            "Printer" => array($hookObj, "addPrinter"));
+    $hooks['item_update'][$p]       = array("Computer" => array($hookObj, "updateComputer"),
+                                            "NetworkEquipment" => array($hookObj, "updateNetworkEquipment"),
+                                            "Printer" => array($hookObj, "updatePrinter"));
+    $hooks['item_purge'][$p]        = array("Computer" => array($hookObj, "delete"),
+                                            "NetworkEquipment" => array($hookObj, "delete"),
+                                            "Printer" => array($hookObj, "delete"));
+    $hooks['item_delete'][$p]       = array("Computer" => array($hookObj, "delete"),
+                                            "NetworkEquipment" => array($hookObj, "delete"),
+                                            "Printer" => array($hookObj, "delete"));
+    $hooks['item_restore'][$p]      = array("Computer" => array($hookObj, "addComputer"),
+                                            "NetworkEquipment" => array($hookObj, "addNetworkEquipment"),
+                                            "Printer" => array($hookObj, "addPrinter"));
 
     $events = array('item_add', 'item_update', 'item_purge', 'item_delete', 'item_restore');
     foreach ($events as $event) {
@@ -47,8 +47,8 @@ function plugin_init_vigilo()
     $hooks["menu_toadd"][$p]['plugins'] = 'PluginVigiloMenu';
     $hooks['config_page'][$p]           = 'front/menu.php?itemtype=vigilo';
     $hooks['autoinventory_information'][$p] = array(
-            'Computer' =>  array('PluginVigiloComputer',
-                                 'showComputerInfo'));
+        'Computer' => array('PluginVigiloComputer', 'showComputerInfo')
+    );
 
     if (!FieldExists('glpi_computers', 'vigilo_template')) {
         $query = "ALTER TABLE glpi_computers ADD vigilo_template VARCHAR(30)";

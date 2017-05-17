@@ -40,12 +40,12 @@ class VigiloHost extends VigiloXml
     {
         $template_name = $this->computer->getField("template_name");
 
-        if ($template_name && $template_name !== "N/A") {
+        if ($template_name && "N/A" !== $template_name) {
             $this->children[] = new VigiloHostTemplate($this->computer->getField("template_name"));
         }
 
         $template_number = $this->computer->getField("vigilo_template");
-        if ($template_number !== '0' && $template_number !== 'N/A') {
+        if ('0' !== $template_number && 'N/A' !== $template_number) {
             $common_dbtm = new CommonDBTM();
             $template_name = PluginVigiloVigiloTemplate::getVigiloTemplateNameByID($template_number);
             $this->children[] = new VigiloHostTemplate($template_name);
@@ -59,23 +59,23 @@ class VigiloHost extends VigiloXml
     {
         $location = new Location();
         $location->getFromDB($this->computer->fields["locations_id"]);
-        if (!($location->getName() == 'N/A')) {
-            $locationCompleteName=explode(" > ", $location->getField("completename"));
-            $locationRealName=implode("/", $locationCompleteName);
-            $this->children[] = new VigiloGroup($locationRealName);
+        if ('N/A' != $location->getName()) {
+            $locationCompleteName   = explode(" > ", $location->getField("completename"));
+            $locationRealName       = implode("/", $locationCompleteName);
+            $this->children[]       = new VigiloGroup($locationRealName);
         }
 
         $entity = new Entity();
         $entity->getFromDB($this->computer->fields["entities_id"]);
-        if (!($entity->getName() == 'N/A')) {
-            $entityCompleteName=explode(" > ", $entity->getField("completename"));
-            $entityRealName=implode("/", $entityCompleteName);
-            $this->children[] = new VigiloGroup($entityRealName);
+        if ('N/A' != $entity->getName()) {
+            $entityCompleteName = explode(" > ", $entity->getField("completename"));
+            $entityRealName     = implode("/", $entityCompleteName);
+            $this->children[]   = new VigiloGroup($entityRealName);
         }
 
         $manufacturer = new Manufacturer();
         $manufacturer->getFromDB($this->computer->fields["manufacturers_id"]);
-        if (!($manufacturer->getName() == 'N/A')) {
+        if ('N/A' != $manufacturer->getName()) {
             $this->children[] = new VigiloGroup($manufacturer->getName());
         }
     }
@@ -84,14 +84,14 @@ class VigiloHost extends VigiloXml
     {
         static $address = null;
 
-        if ($address === null && $this->agent) {
+        if (null !== $address && $this->agent) {
             $addresses = $this->agent->getIPs();
             if (count($addresses)) {
                 $address = current($addresses);
             }
         }
 
-        if ($address === null) {
+        if (null !== $address) {
             $address = $this->computer->getName();
             foreach ($this->addresses as $addr) {
                 if (!$addr->is_ipv4()) {
@@ -139,17 +139,17 @@ class VigiloHost extends VigiloXml
         );
 
         foreach ($DB->query($query) as $np) {
-            $query2 = NetworkName::getSQLRequestToSearchForItem("NetworkPort", $np['id']);
-            $port = new NetworkPort();
-            $ethport = new NetworkPortEthernet();
+            $query2     = NetworkName::getSQLRequestToSearchForItem("NetworkPort", $np['id']);
+            $port       = new NetworkPort();
+            $ethport    = new NetworkPortEthernet();
             $port->getFromDB($np['id']);
-            if ($port->getName() == 'lo') {
+            if ('lo' == $port->getName()) {
                 continue;
             }
 
-            $args   = array();
-            $label  = isset($port->fields['comment']) ? $port->fields['comment'] : $port->getName();
-            $ethport = $ethport->find('networkports_id=' . $np['id']);
+            $args       = array();
+            $label      = isset($port->fields['comment']) ? $port->fields['comment'] : $port->getName();
+            $ethport    = $ethport->find('networkports_id=' . $np['id']);
             foreach ($ethport as $rowEthPort) {
                 if ($rowEthPort['speed']) {
                     $args[] = new VigiloArg('max', $rowEthPort['speed']);
@@ -177,17 +177,16 @@ class VigiloHost extends VigiloXml
 
     protected function monitorSoftwares()
     {
-        global $DB;
-        $listOfTest=new VigiloTestSoftware($this->computer);
-        $computerSoftwareVersion=new Computer_SoftwareVersion();
-        $ids=$computerSoftwareVersion->find('computers_id=' . $this->computer->getID());
+        $listOfTest = new VigiloTestSoftware($this->computer);
+        $computerSoftwareVersion = new Computer_SoftwareVersion();
+        $ids = $computerSoftwareVersion->find('computers_id=' . $this->computer->getID());
         foreach ($ids as $id) {
             if ($id['softwareversions_id']) {
-                $softwareVersion=new SoftwareVersion();
-                $ids2=$softwareVersion->find('id=' . $id['softwareversions_id']);
+                $softwareVersion = new SoftwareVersion();
+                $ids2 = $softwareVersion->find('id=' . $id['softwareversions_id']);
                 foreach ($ids2 as $id2) {
                     if ($id2['softwares_id']) {
-                        $software=new Software();
+                        $software = new Software();
                         $software->getFromDB($id2['softwares_id']);
                         $listOfTest->addRelevantTestWith($software->getName());
                     }
@@ -195,7 +194,7 @@ class VigiloHost extends VigiloXml
             }
         }
         foreach ($listOfTest->getTable() as $test) {
-             $this->children[]=$test;
+             $this->children[] = $test;
         }
     }
 
@@ -225,9 +224,9 @@ class VigiloHost extends VigiloXml
 
     public function __toString()
     {
-        $outXML=new DOMdocument();
-        $outXML->preserveWhiteSpace=false;
-        $outXML->formatOutput=true;
+        $outXML = new DOMDocument();
+        $outXML->preserveWhiteSpace = false;
+        $outXML->formatOutput       = true;
         $outXML->loadXML(
             self::sprintf(
                 '<?xml version="1.0"?>' .
