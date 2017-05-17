@@ -4,7 +4,7 @@ class PluginVigiloVigiloTemplate extends CommonDBTM
 {
     public static function getAllTemplates()
     {
-        $hosttdir = "/etc/vigilo/vigiconf/conf.d/hosttemplates";
+        $hosttdir = VIGILO_CONFDIR . DIRECTORY_SEPARATOR . 'hosttemplates');
         $hosttemplates_files = scandir($hosttdir);
         $templates = array();
         $pattern = "<template name=\"(\w*)\">";

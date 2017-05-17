@@ -2,16 +2,9 @@
 
 class VigiloHooks
 {
-    private $confdir;
-
-    public function __construct($confdir = "/etc/vigilo/vigiconf/conf.d")
-    {
-        $this->confdir = $confdir;
-    }
-
     public function saveHost($host, $dir_type)
     {
-        $dirs       = array($this->confdir, $dir_type, "managed");
+        $dirs       = array(VIGILO_CONFDIR, $dir_type, "managed");
         $confdir    = implode(DIRECTORY_SEPARATOR, $dirs);
         $file       = $confdir . DIRECTORY_SEPARATOR . $host->getName() . ".xml";
 
@@ -106,7 +99,7 @@ class VigiloHooks
 
     public function unmonitor($host)
     {
-        $dirs = array($this->confdir, "hosts", "managed", $host . ".xml");
+        $dirs = array(VIGILO_CONFDIR, "hosts", "managed", $host . ".xml");
         $filename = implode(DIRECTORY_SEPARATOR, $dirs);
         if (file_exists($filename)) {
             unlink($filename);
