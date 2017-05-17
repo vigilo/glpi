@@ -1,0 +1,10 @@
+{
+    "name": "vigilo/vigilo-glpi",
+    "description": "Vigilo integration plugin for GLPI",
+    "type": "library",
+    "license": "GPL-2.0+",
+    "require": {},
+    "require-dev": {
+        "squizlabs/php_codesniffer": "*"
+    }
+}

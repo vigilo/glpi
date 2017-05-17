@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<ruleset name="pssht">
+    <description>Coding standard for Vigilo.</description>
+    <file>src/</file>
+    <arg value="vp"/>
+    <rule ref="PSR2">
+        <!--
+            GLPI impose l'utilisation de classes dans l'espace de nommage
+            global à certains endroits.
+        -->
+        <exclude name="PSR1.Classes.ClassDeclaration.MissingNamespace"/>
+    </rule>
+    <encoding>utf-8</encoding>
+</ruleset>

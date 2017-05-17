@@ -28,3 +28,4 @@ i18n/*/LC_MESSAGES/*.mo
 i18n/*/LC_MESSAGES/*.js
 src/twisted/plugins/dropin.cache
 
+/vendor/
