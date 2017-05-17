@@ -82,9 +82,6 @@ function getSoftwareList($computer)
         // High-performance memory object caching system
         'memcached'  => array("addMemcachedTest", array($computer)),
 
-        //Memory object caching system with master/slave replication and server-side locking
-        'yrmcds'     => array("addMemcachedTest", array($computer)),
-
         //Data caching daemon for RRDtool
         'rrdcached'  => array("addRRDcachedTest", array($computer)),
 
