@@ -1,5 +1,7 @@
 <?php
 
+define('VIGILO_CONFDIR', $confdir);
+
 function vigilo_autoloader($class_name)
 {
     if (!strncmp($class_name, 'Vigilo', 6)) {

@@ -26,7 +26,7 @@ class PluginVigiloMenu extends CommonGLPI
 
     public static function getMenuName()
     {
-        return self::getTypeName();
+        return static::getTypeName();
     }
 
     public static function getAdditionalMenuOptions()
@@ -41,14 +41,35 @@ class PluginVigiloMenu extends CommonGLPI
 
     public static function displayMenu($res, $pipes)
     {
-        echo '<h1>Vigilo</h1><form method="post" action="?itemtype=vigilo">';
+        global $DB;
+
+        $disabled = '';
+        if (!is_resource($res)) {
+            $disabled = 'disabled';
+        }
+
+        echo <<<HTML
+<h1>Vigilo</h1><form method="post" action="?itemtype=vigilo">
+<textarea readonly='readonly' $disabled id='vigilo_deploy' style='display: block; width: 99%; height: 380px'>
+HTML;
+
+        $needs_deploy = false;
+        $query = <<<SQL
+SELECT `value`
+FROM `glpi_plugin_vigilo_config`
+WHERE `key` = 'needs_deploy';
+SQL;
+
+        $result = $DB->query($query);
+        if ($result) {
+            $needs_deploy = (int) $DB->result($result, 0, "value");
+        }
 
         if (is_resource($res)) {
             ini_set("max_execution_time", 0);
             ignore_user_abort(true);
             set_time_limit(0);
 
-            echo '<textarea readonly="readonly" id="vigilo_deploy" style="display: block; width: 99%; height: 280px">';
             do {
                 $read = $exc = $pipes;
                 $write = array();
@@ -84,6 +105,7 @@ class PluginVigiloMenu extends CommonGLPI
             $info = proc_get_status($res);
             if ($info === false) {
                 echo "ERROR: could not determine process status\n";
+                $info = array('exitcode' => null);
             } else {
                 if ($info["signaled"]) {
                     echo "Command terminated by signal ${info['termsig']}\n";
@@ -93,12 +115,22 @@ class PluginVigiloMenu extends CommonGLPI
                 }
                 echo "Command exited with return code ${info['exitcode']}\n";
             }
-
             proc_close($res);
-            echo '</textarea>';
+
+            if (isset($info['exitcode']) && 0 === $info['exitcode']) {
+                $query = "UPDATE `glpi_plugin_vigilo_config` SET `value` = 0 WHERE `key` = 'needs_deploy';";
+                $DB->query($query);
+            }
+        } elseif ($needs_deploy) {
+            echo "Cliquez sur « Déployer la configuration » pour appliquer les modifications en attente.";
+        } else {
+            echo "La configuration est à jour.";
         }
 
-        echo '<button type="submit" name="deploy" value="1">Deploy</button>';
+        echo '</textarea>';
+        echo '<button type="submit" name="deploy" value="1">Déployer la configuration</button> ';
+        echo '<input name="debug" id="debug" value="1" type="checkbox"/> ';
+        echo '<label for="debug">Afficher les informations de débogage</label>';
         Html::closeForm();
     }
 }

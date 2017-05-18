@@ -29,3 +29,20 @@ i18n/*/LC_MESSAGES/*.js
 src/twisted/plugins/dropin.cache
 
 /vendor/
+/src/.*
+/src/*.*
+/src/ajax/
+/src/config/
+/src/css/
+/src/files/
+/src/front/
+/src/inc/
+/src/install/
+/src/lib/
+/src/locales/
+/src/pics/
+/src/plugins/remove.txt
+/src/scripts/
+/src/tests/
+/src/tools/
+/src/vendor/

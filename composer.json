@@ -3,8 +3,11 @@
     "description": "Vigilo integration plugin for GLPI",
     "type": "library",
     "license": "GPL-2.0+",
-    "require": {},
+    "require": {
+        "ext-dom": "*",
+        "ext-pcre": "*"
+    },
     "require-dev": {
-        "squizlabs/php_codesniffer": "*"
+        "squizlabs/php_codesniffer": "< 3.0.0"
     }
 }

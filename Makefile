@@ -7,8 +7,8 @@ include buildenv/Makefile.common.nopython
 install: install_pkg
 
 install_pkg: $(INFILES)
-	-mkdir -p $(DESTDIR)$(DATADIR)/$(NAME)/plugins/vigilo
-	cp -pr src/* $(DESTDIR)$(DATADIR)/$(NAME)/plugins/vigilo/
+	-mkdir -p $(DESTDIR)$(DATADIR)/$(NAME)/plugins/
+	cp -pr src/plugins/vigilo $(DESTDIR)$(DATADIR)/$(NAME)/plugins/
 
 clean: clean_common
 

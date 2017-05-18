@@ -1,6 +1,6 @@
 <?php
 
-class VigiloHostTemplate extends VigiloXml
+class VigiloTemplate extends VigiloXml
 {
     protected $name;
 
