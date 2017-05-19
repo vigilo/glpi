@@ -6,7 +6,7 @@ class PluginVigiloMonitoredComputer extends PluginVigiloAbstractMonitoredItem
 
     public function __construct(CommonDBTM $item)
     {
-        if (null === self::$softwares) {
+        if (null === static::$softwares) {
             // Chargement et validation de la liste des logiciels
             // supervisés automatiquement.
             $mapping    = plugin_vigilo_getSoftwareMapping();
@@ -23,7 +23,7 @@ class PluginVigiloMonitoredComputer extends PluginVigiloAbstractMonitoredItem
                     $softwares[$name] = $test;
                 }
             }
-            self::$softwares = $softwares;
+            static::$softwares = $softwares;
         }
 
         parent::__construct($item);
@@ -99,7 +99,7 @@ class PluginVigiloMonitoredComputer extends PluginVigiloAbstractMonitoredItem
                 $lcname = strtolower($software->getName());
                 if (isset(static::$softwares[$lcname])) {
                     // Gestion des logiciels supervisés automatiquement.
-                    list($testName, $testArgs) = static::$softwares[$name];
+                    list($testName, $testArgs) = static::$softwares[$lcname];
                     $this->children[] = new VigiloTest($testName, $testArgs);
                 } elseif (!strncmp($lcname, 'vigilo-test-', 12)) {
                     // Gestion des "faux logiciels".
@@ -128,7 +128,7 @@ class PluginVigiloMonitoredComputer extends PluginVigiloAbstractMonitoredItem
     {
         $port = (int) $port;
         if ($port > 0 && $port <= 65535) {
-            $this->children[] = new Vigilotest('TCP', array('port') => $port);
+            $this->children[] = new Vigilotest('TCP', array('port' => $port));
         }
     }
 

@@ -12,7 +12,7 @@ class VigiloHooks
         $query = <<<SQL
 SELECT `template`
 FROM glpi_plugin_vigilo_template
-WHERE `item_id` = $id;
+WHERE `id` = $id;
 SQL;
 
         $item->fields['vigilo_template'] = 0;
@@ -38,7 +38,7 @@ SQL;
             $id         = $item->getID();
             $template   = $DB->escape($templates[$tplId]);
             $query      = <<<SQL
-INSERT INTO `glpi_plugin_vigilo_template`(`item_id`, `template`)
+INSERT INTO `glpi_plugin_vigilo_template`(`id`, `template`)
 VALUES ($id, '$template')
 ON DUPLICATE KEY UPDATE `template` = '$template';
 SQL;
@@ -56,7 +56,7 @@ SQL;
         global $DB;
 
         $id         = $item->getID();
-        $query      = "DELETE FROM `glpi_plugin_vigilo_template` WHERE `item_id` = $id;";
+        $query      = "DELETE FROM `glpi_plugin_vigilo_template` WHERE `id` = $id;";
         $DB->query($query);
         $this->unmonitor($item->getField('name'));
     }
@@ -77,27 +77,6 @@ SQL;
             chgrp($file, "vigiconf");
             chmod($file, 0660);
         }
-    }
-
-    // @codingStandardsIgnoreStart
-    public function plugin_vigilo_getAddSearchOptions($itemtype)
-    {
-        // Le nom de la méthode est imposé par GLPI.
-        // @codingStandardsIgnoreEnd
-        $options = array();
-
-        if (!in_array($itemtype, array('Computer', 'NetworkEquipment', 'Printer'))) {
-            return $options;
-        }
-
-        $options['7007']['table']          = 'glpi_plugin_vigilo_template';
-        $options['7007']['field']          = 'template';
-        $options['7007']['linkfield']      = 'id';
-        $options['7007']['name']           = 'vigilo_template';
-        $options['7007']['massiveaction']  = true;
-        $options['7007']['datatype']       = 'dropdown';
-
-        return $options;
     }
 
     // Méthodes d'ajout / mise à jour / suppression de la supervision

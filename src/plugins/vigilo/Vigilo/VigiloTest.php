@@ -10,8 +10,8 @@ class VigiloTest extends VigiloXml implements ArrayAccess
         $this->name = $name;
         $this->args = array();
 
-        foreach ($args as $arg) {
-            $this[] = $arg;
+        foreach ($args as $arg => $value) {
+            $this[$arg] = $value;
         }
     }
 

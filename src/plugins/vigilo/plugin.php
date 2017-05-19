@@ -77,9 +77,9 @@ function plugin_vigilo_install()
     if (!TableExists('glpi_plugin_vigilo_template')) {
         $query = <<<SQL
 CREATE TABLE `glpi_plugin_vigilo_template` (
-    `item_id` int(11) NOT NULL default '0',
+    `id` int(11) NOT NULL default '0',
     `template` varchar(255) collate utf8_unicode_ci default NULL,
-    PRIMARY KEY (`item_id`)
+    PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 SQL;
         $DB->query($query) or die($DB->error());
@@ -111,4 +111,25 @@ function plugin_vigilo_uninstall()
     }
 
     return true;
+}
+
+// @codingStandardsIgnoreStart
+function plugin_vigilo_getAddSearchOptions($itemtype)
+{
+    // Le nom de la méthode est imposé par GLPI.
+    // @codingStandardsIgnoreEnd
+    $options = array();
+
+    if (!in_array($itemtype, array('Computer', 'NetworkEquipment', 'Printer'))) {
+        return $options;
+    }
+
+    $options[7007]['table']           = 'glpi_plugin_vigilo_template';
+    $options[7007]['field']           = 'template';
+    $options[7007]['linkfield']       = 'id';
+    $options[7007]['name']            = 'Template Vigilo';
+    $options[7007]['massiveaction']   = true;
+    $options[7007]['datatype']        = 'dropdown';
+
+    return $options;
 }

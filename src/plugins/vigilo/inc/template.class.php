@@ -28,7 +28,7 @@ class PluginVigiloTemplate extends CommonDBTM
         $query = <<<SQL
 SELECT `template`
 FROM glpi_plugin_vigilo_template
-WHERE `item_id` = $id;
+WHERE `id` = $id;
 SQL;
         $result = $DB->query($query);
         if ($result) {
