@@ -132,7 +132,9 @@ abstract class PluginVigiloAbstractMonitoredItem extends VigiloXml
             $ethport    = $ethport->find('networkports_id=' . $np['id']);
             foreach ($ethport as $rowEthPort) {
                 if ($rowEthPort['speed']) {
-                    $test['max'] = $rowEthPort['speed'];
+                    // La bande passante de l'interface est exprimée
+                    // en Mbit/s dans GLPI et on la veut en bit/s dans Vigilo.
+                    $test['max'] = $rowEthPort['speed'] << 20;
                     break;
                 }
             }
