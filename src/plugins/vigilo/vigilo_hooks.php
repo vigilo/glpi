@@ -133,24 +133,23 @@ SQL;
 
     public function refreshSoftware($software)
     {
-        $softwareVer = new SoftwareVersion();
-        $idSoftwareVersion = $softwareVer->find('softwares_id=' . $software->getID());
-        foreach ($idSoftwareVersion as $idVersion) {
-            if (!$idVersion['id']) {
+        $softwareVer    = new SoftwareVersion();
+        $versions       = $softwareVer->find('softwares_id=' . $software->getID());
+        foreach ($versions as $version) {
+            if (!$version['id']) {
                 continue;
             }
 
-            $computerVer = new Computer_SoftwareVersion();
-            $goodField   = 'softwareversions_id=' . $idVersion['id'];
-            $updateComp  = $computerVer->find($goodField);
-
-            foreach ($updateComp as $idComputer) {
-                if (-1 === $idComputer['computers_id']) {
+            $installations  = new Computer_SoftwareVersion();
+            $filter         = 'softwareversions_id=' . $version['id'];
+            $installations  = $installations->find($filter);
+            foreach ($installations as $installation) {
+                if (-1 === $installation['computers_id']) {
                     continue;
                 }
 
                 $computer = new Computer();
-                $computer->getFromDB($idComputer['computers_id']);
+                $computer->getFromDB($installation['computers_id']);
                 $this->update($computer);
             }
         }

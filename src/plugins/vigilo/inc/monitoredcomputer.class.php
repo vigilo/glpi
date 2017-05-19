@@ -79,23 +79,22 @@ class PluginVigiloMonitoredComputer extends PluginVigiloAbstractMonitoredItem
 
     protected function monitorSoftwares()
     {
-        $computerSoftwareVersion = new Computer_SoftwareVersion();
-        $ids = $computerSoftwareVersion->find('computers_id=' . $this->item->getID());
-        foreach ($ids as $id) {
-            if (!$id['softwareversions_id']) {
+        $installations = new Computer_SoftwareVersion();
+        $installations = $installations->find('computers_id=' . $this->item->getID());
+        foreach ($installations as $installation) {
+            if (!$installation['softwareversions_id']) {
                 continue;
             }
 
-            $softwareVersion = new SoftwareVersion();
-            $ids2 = $softwareVersion->find('id=' . $id['softwareversions_id']);
-            foreach ($ids2 as $id2) {
-                if (!$id2['softwares_id']) {
+            $versions = new SoftwareVersion();
+            $versions = $versions->find('id=' . $installation['softwareversions_id']);
+            foreach ($versions as $version) {
+                if (!$version['softwares_id']) {
                     continue;
                 }
 
                 $software = new Software();
-                $software->getFromDB($id2['softwares_id']);
-
+                $software->getFromDB($version['softwares_id']);
                 $lcname = strtolower($software->getName());
                 if (isset(static::$softwares[$lcname])) {
                     // Gestion des logiciels supervisés automatiquement.
@@ -108,8 +107,8 @@ class PluginVigiloMonitoredComputer extends PluginVigiloAbstractMonitoredItem
                         continue;
                     }
 
-                    $type   = ucfirst(strtolower($parts[3]));
-                    $args   = isset($parts[4]) ? $parts[4] : null;
+                    $type   = ucfirst(strtolower($parts[2]));
+                    $args   = isset($parts[3]) ? $parts[3] : null;
                     $method = 'monitorCustom' . $type;
                     if (method_exists($this, $method)) {
                         $this->$method($software, $args);
@@ -121,11 +120,19 @@ class PluginVigiloMonitoredComputer extends PluginVigiloAbstractMonitoredItem
 
     protected function monitorCustomService($software, $service)
     {
+        if (!$service) {
+            return;
+        }
+
         $this->children[] = new VigiloTest('Service', array('svcname' => $service));
     }
 
     protected function monitorCustomTcp($software, $port)
     {
+        if (!$port) {
+            return;
+        }
+
         $port = (int) $port;
         if ($port > 0 && $port <= 65535) {
             $this->children[] = new Vigilotest('TCP', array('port' => $port));
@@ -134,6 +141,10 @@ class PluginVigiloMonitoredComputer extends PluginVigiloAbstractMonitoredItem
 
     protected function monitorCustomProcess($software, $process)
     {
+        if (!$process) {
+            return;
+        }
+
         $this->children[] = new VigiloTest('Process', array('processname' => $process));
     }
 
