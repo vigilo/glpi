@@ -25,7 +25,8 @@ if (PluginVigiloMenu::canView()) {
         );
 
         $debug  = empty($_POST['debug']) ? '' : '--debug';
-        $cmd    = "/usr/bin/sudo -n /usr/bin/vigiconf deploy -f $debug";
+        $force  = empty($_POST['force']) ? '' : '--force';
+        $cmd    = "/usr/bin/sudo -n /usr/bin/vigiconf deploy $force $debug";
         $res    = proc_open($cmd, $fds, $pipes);
 
         if (!is_resource($res)) {

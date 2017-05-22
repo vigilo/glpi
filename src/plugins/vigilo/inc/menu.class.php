@@ -131,6 +131,8 @@ SQL;
         echo '<button type="submit" name="deploy" value="1">Déployer la configuration</button> ';
         echo '<input name="debug" id="debug" value="1" type="checkbox"/> ';
         echo '<label for="debug">Afficher les informations de débogage</label>';
+        echo '<input name="force" id="force" value="1" type="checkbox"/> ';
+        echo '<label for="force">Regénérer tous les fichiers</label>';
         Html::closeForm();
     }
 }

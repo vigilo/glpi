@@ -1,2 +1,2 @@
 Defaults:apache !requiretty
-apache ALL=(root) NOPASSWD: /usr/bin/vigiconf deploy *
+apache ALL=(root) NOPASSWD: /usr/bin/vigiconf deploy, /usr/bin/vigiconf deploy *
