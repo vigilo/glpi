@@ -10,11 +10,13 @@ class PluginVigiloGroups
             'Entities'      => new VigiloGroups('Entities'),
             'Manufacturers' => new VigiloGroups('Manufacturers'),
             'Locations'     => new VigiloGroups('Locations'),
+            'Technicians'   => new VigiloGroups('Technicians'),
         );
 
         $this->getManufacturers();
         $this->getEntities();
         $this->getLocations();
+        $this->getTechnicians();
     }
 
     public function getName()
@@ -60,6 +62,33 @@ class PluginVigiloGroups
                 $pos =& $pos[$part];
             }
             $pos[] = $name;
+        }
+    }
+
+    protected function getTechnicians()
+    {
+        global $DB;
+
+        // Ce serait plus propre d'utiliser la surcouche de GLPI
+        // pour récupérer l'information, mais cela serait aussi
+        // beaucoup plus coûteux (plus d'appels à la BDD, etc.).
+
+        $query = <<<SQL
+SELECT DISTINCT u.name
+FROM glpi_users u
+JOIN (
+    SELECT users_id_tech
+    FROM glpi_computers
+    UNION ALL
+    SELECT users_id_tech
+    FROM glpi_networkequipments
+    UNION ALL
+    SELECT users_id_tech
+    FROM glpi_printers
+) as a1 on a1.users_id_tech = u.id;
+SQL;
+        foreach ($DB->request($query) as $row) {
+            $this->groups['Technicians'][] = $row['name'];
         }
     }
 

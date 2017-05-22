@@ -48,6 +48,12 @@ SQL;
             $item->fields['vigilo_template'] = null;
         }
 
+        // Si la mise à jour modifie le technicien associé à la machine,
+        // il peut-être nécessaire de mettre à jour les groupes de Vigilo.
+        if (!empty($item->fields['users_id_tech'])) {
+            $this->updateGroups(null);
+        }
+
         $this->update($item);
     }
 
@@ -59,6 +65,12 @@ SQL;
         $query      = "DELETE FROM `glpi_plugin_vigilo_template` WHERE `id` = $id;";
         $DB->query($query);
         $this->unmonitor($item->getField('name'));
+
+        // Si la mise à jour modifie le technicien associé à la machine,
+        // il peut-être nécessaire de mettre à jour les groupes de Vigilo.
+        if (!empty($item->fields['users_id_tech'])) {
+            $this->updateGroups(null);
+        }
     }
 
     // Méthodes outils / annexes

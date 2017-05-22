@@ -49,13 +49,13 @@ abstract class PluginVigiloAbstractMonitoredItem extends VigiloXml
         $entity = new Entity();
         $entity->getFromDB($this->item->fields["entities_id"]);
 
+        // Association de l'objet à son emplacement et à son entité.
         $candidates = array(
             'Locations' => $location,
             'Entities'  => $entity,
         );
-
         foreach ($candidates as $type => $candidate) {
-            if ('N/A' === $candidate->getName()) {
+            if (NOT_AVAILABLE === $candidate->getName()) {
                 continue;
             }
 
@@ -67,10 +67,18 @@ abstract class PluginVigiloAbstractMonitoredItem extends VigiloXml
             $this->children[]   = new VigiloGroup($groupName);
         }
 
+        // Association de l'objet à son équipementier.
         $manufacturer = new Manufacturer();
         $manufacturer->getFromDB($this->item->fields["manufacturers_id"]);
-        if ('N/A' !== $manufacturer->getName()) {
+        if (NOT_AVAILABLE !== $manufacturer->getName()) {
             $this->children[] = new VigiloGroup("/Manufacturers/" . $manufacturer->getName());
+        }
+
+        // Association de l'objet à son technicien.
+        $technician = new User();
+        $technician->getFromDB($this->item->fields["users_id_tech"]);
+        if (NOT_AVAILABLE !== $technician->getName()) {
+            $this->children[] = new VigiloGroup("/Technicians/" . $technician->getName());
         }
     }
 
