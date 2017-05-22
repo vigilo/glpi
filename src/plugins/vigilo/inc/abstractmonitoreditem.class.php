@@ -125,7 +125,7 @@ abstract class PluginVigiloAbstractMonitoredItem extends VigiloXml
             $label = !empty($port->fields['comment']) ? $port->fields['comment'] : $port->getName();
 
             $this->children[] =
-                        $test = new VigiloTest('Interface', $args);
+                        $test = new VigiloTest('Interface');
             $test['label']  = $label;
             $test['ifname'] = $port->getName();
 
