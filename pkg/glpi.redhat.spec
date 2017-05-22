@@ -48,7 +48,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc COPYING.txt
 %{_datadir}/%{module}/plugins/
-%{_sysconfdir}/sudoers.d/%{name}
+%config(noreplace) %{_sysconfdir}/sudoers.d/%{name}
 %defattr(644,vigiconf,apache,770)
 %dir %{vigiconf_confdir}/groups/managed/
 %dir %{vigiconf_confdir}/hosts/managed/
