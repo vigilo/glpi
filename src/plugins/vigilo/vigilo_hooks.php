@@ -74,8 +74,8 @@ SQL;
 
         $res = file_put_contents($file, $obj, LOCK_EX);
         if (false !== $res) {
-            chgrp($file, "vigiconf");
-            chmod($file, 0660);
+            @chgrp($file, "vigiconf");
+            @chmod($file, 0660);
         }
     }
 
