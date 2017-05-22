@@ -1,0 +1,8 @@
+#!/bin/sh
+
+pid_list=`ps ax | grep vigilo-vigirrd | grep -v grep | awk '{print $1}'`
+
+for pid in $pid_list
+do
+    kill -HUP $pid
+done
