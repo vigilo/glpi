@@ -114,7 +114,13 @@ SQL;
         $query = "UPDATE `glpi_plugin_vigilo_config` SET `value` = 1 WHERE `key` = 'needs_deploy';";
         $DB->query($query);
 
-        if ($item->getField("is_template")) {
+        // "is_template" vaut "1" (sous forme de chaîne de caractères)
+        // lorsque l'objet passé fait référence à un modèle dans GLPI,
+        // et "0" lorsque ce n'est pas le cas.
+        // MAIS, il peut aussi valoir NOT_AVAILABLE ("N/A") lors de la création
+        // d'un nouvel objet (car l'attribut n'est pas encore défini).
+        // Le cast sur le champ permet de gérer ces 3 cas.
+        if ((int) $item->getField("is_template")) {
             return;
         }
 
