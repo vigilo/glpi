@@ -33,6 +33,19 @@ abstract class PluginVigiloAbstractMonitoredItem extends VigiloXml
         return $this->item->getName();
     }
 
+    protected function filterTests($value)
+    {
+        return is_object($value) && ($value instanceof VigiloTest);
+    }
+
+    public function getTests()
+    {
+        return new CallbackFilterIterator(
+            new ArrayIterator($this->children),
+            array($this, 'filterTests')
+        );
+    }
+
     protected function selectTemplates()
     {
         $template = $this->item->fields['vigilo_template'];
@@ -164,19 +177,13 @@ abstract class PluginVigiloAbstractMonitoredItem extends VigiloXml
 
     public function __toString()
     {
-        $outXML = new DOMDocument();
-        $outXML->preserveWhiteSpace = false;
-        $outXML->formatOutput       = true;
-        $outXML->loadXML(
-            self::sprintf(
-                '<?xml version="1.0"?>' .
-                '<host name="%s" address="%s" ventilation="%s">%s</host>',
-                $this->item->getName(),
-                $this->selectAddress(),
-                "Servers",
-                $this->children
-            )
+        return self::sprintf(
+            '<?xml version="1.0"?>' .
+            '<host name="%s" address="%s" ventilation="%s">%s</host>',
+            $this->item->getName(),
+            $this->selectAddress(),
+            "Servers",
+            $this->children
         );
-        return $outXML->saveXML();
     }
 }

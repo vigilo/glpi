@@ -55,6 +55,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,vigiconf,apache,770)
 %dir %{vigiconf_confdir}/groups/managed/
 %dir %{vigiconf_confdir}/hosts/managed/
+%dir %{vigiconf_confdir}/hlservices/managed/
 %attr(755,root,root) %{_initrddir}/%{name}
 
 %changelog

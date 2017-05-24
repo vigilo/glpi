@@ -12,6 +12,7 @@ install_base: $(INFILES)
 	mkdir -p $(DESTDIR)$(DATADIR)/$(NAME)/plugins/
 	mkdir -p $(DESTDIR)$(SYSCONFDIR)/vigilo/vigiconf/conf.d/groups/managed
 	mkdir -p $(DESTDIR)$(SYSCONFDIR)/vigilo/vigiconf/conf.d/hosts/managed
+	mkdir -p $(DESTDIR)$(SYSCONFDIR)/vigilo/vigiconf/conf.d/hlservices/managed
 	cp -pr src/plugins/vigilo $(DESTDIR)$(DATADIR)/$(NAME)/plugins/
 
 install_data: pkg/init pkg/sudoers
@@ -24,8 +25,10 @@ install_permissions:
 	chown root:root $(DESTDIR)$(SYSCONFDIR)/sudoers.d/$(PKGNAME)
 	chown vigiconf:apache $(DESTDIR)$(SYSCONFDIR)/vigilo/vigiconf/conf.d/groups/managed
 	chown vigiconf:apache $(DESTDIR)$(SYSCONFDIR)/vigilo/vigiconf/conf.d/hosts/managed
+	chown vigiconf:apache $(DESTDIR)$(SYSCONFDIR)/vigilo/vigiconf/conf.d/hlservices/managed
 	chmod 0770 $(DESTDIR)$(SYSCONFDIR)/vigilo/vigiconf/conf.d/groups/managed
 	chown 0770 $(DESTDIR)$(SYSCONFDIR)/vigilo/vigiconf/conf.d/hosts/managed
+	chown 0770 $(DESTDIR)$(SYSCONFDIR)/vigilo/vigiconf/conf.d/hlservices/managed
 
 clean: clean_common
 

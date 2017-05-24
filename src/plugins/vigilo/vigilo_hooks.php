@@ -84,7 +84,11 @@ SQL;
             mkdir($confdir, 0770, true);
         }
 
-        $res = file_put_contents($file, $obj, LOCK_EX);
+        $outXML = new DOMDocument();
+        $outXML->preserveWhiteSpace = false;
+        $outXML->formatOutput       = true;
+        $outXML->loadXML((string) $obj);
+        $res = file_put_contents($file, $outXML->saveXML(), LOCK_EX);
         if (false !== $res) {
             @chgrp($file, "vigiconf");
             @chmod($file, 0660);
@@ -127,7 +131,16 @@ SQL;
         $cls = "PluginVigiloMonitored" . $item->getType();
         if (class_exists($cls, true)) {
             $obj = new $cls($item);
+
+            // Ecriture du fichier de configuration principal (host).
             $this->writeVigiloConfig($obj, "hosts");
+
+            // Création d'un service de haut niveau "services:<nom>"
+            // qui affichera le pire état des services de la machine "<nom>",
+            // et d'un service "machine:<nom>" qui affichera le pire état
+            // entre l'état de la machine "<nom>" et de ses services.
+            $hls = new PluginVigiloHls($obj);
+            $this->writeVigiloConfig($hls, "hlservices");
         }
     }
 

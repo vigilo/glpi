@@ -15,6 +15,13 @@ class VigiloTest extends VigiloXml implements ArrayAccess
         }
     }
 
+    public function getNagiosNames()
+    {
+        $res = array();
+
+        return $res;
+    }
+
     public function offsetExists($offset)
     {
         $name = is_a($offset, 'VigiloArg') ? $offset->getName() : $offset;
