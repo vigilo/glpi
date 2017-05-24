@@ -127,12 +127,21 @@ SQL;
             echo "La configuration est à jour.";
         }
 
-        echo '</textarea>';
-        echo '<button type="submit" name="deploy" value="1">Déployer la configuration</button> ';
-        echo '<input name="debug" id="debug" value="1" type="checkbox"/> ';
-        echo '<label for="debug">Afficher les informations de débogage</label>';
-        echo '<input name="force" id="force" value="1" type="checkbox"/> ';
-        echo '<label for="force">Regénérer tous les fichiers</label>';
+        $force = empty($_POST['force']) ? '' : 'checked';
+        $debug = empty($_POST['debug']) ? '' : 'checked';
+        echo <<<HTML
+</textarea>
+
+<button type="submit" name="deploy" value="1">Déployer la configuration</button>
+
+<label for="debug"><input name="debug" id="debug" value="1" type="checkbox" $debug
+ title="Affiche les informations de diagnostic et de progression de Vigilo"
+/> Afficher les informations de débogage</label>
+
+<label for="force"><input name="force" id="force" value="1" type="checkbox" $force
+ title="Force un déploiement complet plutôt qu'un déploiement en mode incrémental"
+/> Regénérer tous les fichiers</label>
+HTML;
         Html::closeForm();
     }
 }
