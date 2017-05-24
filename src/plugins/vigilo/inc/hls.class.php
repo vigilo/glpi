@@ -1,6 +1,6 @@
 <?php
 
-class PluginVigiloAbstractMonitoredItem extends VigiloXml
+class PluginVigiloHls extends VigiloXml
 {
     protected $name;
     protected $hlsHost;
@@ -16,12 +16,14 @@ class PluginVigiloAbstractMonitoredItem extends VigiloXml
         $this->hlsServices  = new VigiloHlservice(
             "services:$name",
             VigiloHlservice::OPERATOR_AND,
-            self::MESSAGE
+            self::MESSAGE,
+            1,  // Seuil warning
+            0   // Seuil critical
         );
         $nbServices = 0;
         foreach ($host->getTests() as $test) {
             foreach ($test->getNagiosNames() as $service) {
-                $this->hlsServices[] = new VigiloDepends($name, $service);
+                $this->hlsServices[] = new VigiloDepends($name, $service, 2, 1);
                 $nbServices++;
             }
         }
@@ -30,10 +32,12 @@ class PluginVigiloAbstractMonitoredItem extends VigiloXml
         $this->hlsHost      = new VigiloHlservice(
             "machine:$name",
             VigiloHlservice::OPERATOR_AND,
-            self::MESSAGE
+            self::MESSAGE,
+            1,  // Seuil warning
+            0   // Seuil critical
         );
-        $this->hlsHost[]    = new VigiloDepends($host);
-        $this->hlsHost[]    = new VigiloDepends(null, "services:$name");
+        $this->hlsHost[]    = new VigiloDepends($name, null, 2);
+        $this->hlsHost[]    = new VigiloDepends(null, "services:$name", 2, 1);
         $this->name         = $name;
     }
 
@@ -44,6 +48,6 @@ class PluginVigiloAbstractMonitoredItem extends VigiloXml
 
     public function __toString()
     {
-        return "<?xml version="1.0"?><hlservices>{$this->hlsHost}{$this->hlsServices}</hlservices>";
+        return "<?xml version=\"1.0\"?><hlservices>{$this->hlsHost}{$this->hlsServices}</hlservices>";
     }
 }

@@ -4,31 +4,54 @@ class VigiloDepends extends VigiloXml
 {
     protected $host;
     protected $service;
+    protected $weight;
+    protected $warningWeight;
 
-    public function __construct($host = null, $service = null)
+    public function __construct($host = null, $service = null, $weight = 1, $warningWeight = null)
     {
         if (null === $host && null === $service) {
             throw new Exception('Invalid dependency');
         }
 
-        if ('' === $host || '' === $service || !is_string($host) || !is_string($service)) {
+        if ('' === $host || '' === $service) {
             throw new Exception('Invalid dependency');
         }
 
-        $this->host     = $host;
-        $this->service  = $service;
+        if ((null !== $host && !is_string($host)) ||
+            (null !== $service && !is_string($service))) {
+            throw new Exception('Invalid dependency');
+        }
+
+        if (null !== $host && null !== $warningWeight) {
+            // L'état "warning" n'existe pas pour les hôtes.
+            throw new Exception('Invalid dependency');
+        }
+
+        if (null === $warningWeight) {
+            $warningWeight = $weight;
+        }
+
+        $this->host             = $host;
+        $this->service          = $service;
+        $this->weight           = (int) $weight;
+        $this->warningWeight    = (int) $warningWeight;
     }
 
     public function __toString()
     {
         if (null === $this->host) {
-            return "<depends service=\"{$this->service}\"/>";
+            return  "<depends service=\"{$this->service}\" " .
+                    "weight=\"{$this->weight}\" " .
+                    "warning_weight=\"{$this->warningWeight}\"/>";
         }
 
         if (null === $this->service) {
-            return "<depends host=\"{$this->host}\"/>";
+            return "<depends host=\"{$this->host}\" weight=\"{$this->weight}\"/>";
         }
 
-        return "<depends host=\"{$this->host}\" service=\"{$this->service}\"/>";
+        return  "<depends host=\"{$this->host}\" " .
+                "service=\"{$this->service}\" " .
+                "weight=\"{$this->weight}\" " .
+                "warning_weight=\"{$this->warningWeight}\"/>";
     }
 }

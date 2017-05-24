@@ -17,7 +17,7 @@ class VigiloHlservice extends VigiloXml implements ArrayAccess
 
     public function __construct($name, $operator, $message, $warnThreshold = 0, $critThreshold = 0)
     {
-        if (!in_array($operator, array(self::OP_AND, self::OP_OR, self::OP_PLUS))) {
+        if (!in_array($operator, array(self::OPERATOR_AND, self::OPERATOR_OR, self::OPERATOR_PLUS))) {
             throw new Exception('Invalid operator');
         }
 

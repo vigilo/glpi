@@ -33,7 +33,7 @@ abstract class PluginVigiloAbstractMonitoredItem extends VigiloXml
         return $this->item->getName();
     }
 
-    protected function filterTests($value)
+    public function filterTests($value)
     {
         return is_object($value) && ($value instanceof VigiloTest);
     }
