@@ -38,7 +38,10 @@ make install_pkg \
     INITDIR=%{_initrddir}
 
 %pre
+# On autorise l'accès aux fichiers de configuration
+# de Vigilo (VigiConf) dans les 2 sens.
 usermod -a -G apache vigiconf || :
+usermod -a -G vigiconf apache || :
 exit 0
 
 %clean
