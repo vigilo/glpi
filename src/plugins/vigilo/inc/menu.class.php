@@ -16,7 +16,7 @@ class PluginVigiloMenu extends CommonGLPI
 
     public static function canView()
     {
-        return true;
+        return Session::haveRight("config", UPDATE);
     }
 
     public static function canCreate()
