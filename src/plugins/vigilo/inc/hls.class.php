@@ -48,6 +48,6 @@ class PluginVigiloHls extends VigiloXml
 
     public function __toString()
     {
-        return "<?xml version=\"1.0\"?><hlservices>{$this->hlsHost}{$this->hlsServices}</hlservices>";
+        return "<?xml version=\"1.0\"?><hlservices>{$this->hlsServices}{$this->hlsHost}</hlservices>";
     }
 }
