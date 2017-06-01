@@ -69,7 +69,11 @@ class VigiloHlservice extends VigiloXml implements ArrayAccess
         if (!is_object($value) || !($value instanceof VigiloDepends)) {
             throw new \RuntimeException("Invalid dependency");
         }
-        $this->dependencies[$offset] = $value;
+        if (null === $offset) {
+            $this->dependencies[] = $value;
+        } else {
+            $this->dependencies[$offset] = $value;
+        }
     }
 
     public function offsetUnset($offset)
@@ -94,7 +98,7 @@ class VigiloHlservice extends VigiloXml implements ArrayAccess
         }
 
         $xml = <<<HLS
-<hlservice>
+<hlservice name="%s">
     <message>%s</message>
     <warning_threshold>%d</warning_threshold>
     <critical_threshold>%d</critical_threshold>
@@ -105,6 +109,7 @@ class VigiloHlservice extends VigiloXml implements ArrayAccess
 HLS;
         return self::sprintf(
             $xml,
+            $this->name,
             $this->message,
             $this->warnThreshold,
             $this->critThreshold,
