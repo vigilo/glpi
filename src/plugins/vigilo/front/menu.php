@@ -27,7 +27,11 @@ if (PluginVigiloMenu::canView()) {
         $debug  = empty($_POST['debug']) ? '' : '--debug';
         $force  = empty($_POST['force']) ? '' : '--force';
         $cmd    = "/usr/bin/sudo -n /usr/bin/vigiconf deploy $force $debug";
-        $res    = proc_open($cmd, $fds, $pipes);
+        $env    = array(
+            "LC_ALL" => isset($_SESSION["glpilanguage"]) ? $_SESSION["glpilanguage"] : "en",
+            "PATH" => getenv("PATH")
+        );
+        $res    = proc_open($cmd, $fds, $pipes, NULL, $env);
 
         if (!is_resource($res)) {
             $res = false;
