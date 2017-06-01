@@ -32,7 +32,7 @@ if (!empty($_POST["deploy"])) {
         "LC_ALL" => isset($_SESSION["glpilanguage"]) ? $_SESSION["glpilanguage"] : "en",
         "PATH" => getenv("PATH")
     );
-    $res    = proc_open($cmd, $fds, $pipes, NULL, $env);
+    $res    = proc_open($cmd, $fds, $pipes, null, $env);
 
     if (!is_resource($res)) {
         $res = false;
