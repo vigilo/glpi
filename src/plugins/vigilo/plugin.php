@@ -1,6 +1,7 @@
 <?php
 
-define('VIGILO_MIN_GLPI_VERSION', '9.1.1');
+/* GLPI 9.1.2+ est nécessaire pour disposer du hook "post_show_item". */
+define('VIGILO_MIN_GLPI_VERSION', '9.1.2');
 
 function plugin_init_vigilo()
 {
