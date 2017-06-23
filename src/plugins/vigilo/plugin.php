@@ -50,11 +50,11 @@ function plugin_init_vigilo()
 function plugin_version_vigilo()
 {
     return array('name'           => 'Vigilo monitoring',
-                'version'        => '0.1',
-                'author'         => 'CSSI',
-                'license'        => 'GPLv2+',
-                'homepage'       => 'http://vigilo-nms.org',
-                'minGlpiVersion' => VIGILO_MIN_GLPI_VERSION);
+                 'version'        => trim(file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . 'VERSION.txt')),
+                 'author'         => 'CSSI',
+                 'license'        => 'GPLv2+',
+                 'homepage'       => 'http://vigilo-nms.org',
+                 'minGlpiVersion' => VIGILO_MIN_GLPI_VERSION);
 }
 
 function plugin_vigilo_check_config($verbose = false)
