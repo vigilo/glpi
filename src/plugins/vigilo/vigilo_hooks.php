@@ -146,10 +146,15 @@ SQL;
 
     public function unmonitor($host)
     {
-        $dirs = array(VIGILO_CONFDIR, "hosts", "managed", $host . ".xml");
-        $filename = implode(DIRECTORY_SEPARATOR, $dirs);
-        if (file_exists($filename)) {
-            unlink($filename);
+        $dirs = array(
+            array(VIGILO_CONFDIR, "hosts", "managed", $host . ".xml"),
+            array(VIGILO_CONFDIR, "hlservices", "managed", $host . ".xml"),
+        );
+        foreach ($dirs as $components) {
+            $filename = implode(DIRECTORY_SEPARATOR, $components);
+            if (file_exists($filename)) {
+                unlink($filename);
+            }
         }
     }
 
