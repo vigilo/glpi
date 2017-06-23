@@ -48,7 +48,8 @@ abstract class PluginVigiloAbstractMonitoredItem extends VigiloXml
 
     protected function selectTemplates()
     {
-        $template = $this->item->fields['vigilo_template'];
+        $template = isset($this->item->fields['vigilo_template']) ?
+                    $this->item->fields['vigilo_template'] : null;
         if (null !== $template) {
             $this->children[] = new VigiloTemplate($template);
         }
