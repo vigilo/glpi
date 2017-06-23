@@ -9,11 +9,16 @@ class VigiloDepends extends VigiloXml
 
     public function __construct($host = null, $service = null, $weight = 1, $warningWeight = null)
     {
-        if (null === $host && null === $service) {
-            throw new Exception('Invalid dependency');
+        /* GLPI signale parfois l'absence de valeur via des chaînes vides,
+           plutôt qu'en utilisant la constante null. */
+        if ('' === $host) {
+            $host = null;
+        }
+        if ('' === $service) {
+            $service = null;
         }
 
-        if ('' === $host || '' === $service) {
+        if (null === $host && null === $service) {
             throw new Exception('Invalid dependency');
         }
 
@@ -22,7 +27,7 @@ class VigiloDepends extends VigiloXml
             throw new Exception('Invalid dependency');
         }
 
-        if (null !== $host && null !== $warningWeight) {
+        if (null === $service && null !== $warningWeight) {
             // L'état "warning" n'existe pas pour les hôtes.
             throw new Exception('Invalid dependency');
         }
