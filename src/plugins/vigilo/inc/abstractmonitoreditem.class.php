@@ -98,31 +98,18 @@ abstract class PluginVigiloAbstractMonitoredItem extends VigiloXml
 
     protected function selectAddress()
     {
-        static $address = null;
-
-        if (null === $address && $this->agent) {
+        if ($this->agent) {
             $addresses = $this->agent->getIPs();
             if (count($addresses)) {
-                $address = current($addresses);
+                return current($addresses);
             }
         }
 
-        if (null === $address) {
-            $address = $this->item->getName();
-            foreach ($this->addresses as $addr) {
-                if (!$addr->is_ipv4()) {
-                    continue;
-                }
-
-                $textual = $addr->getTextual();
-                if (is_string($textual)) {
-                    $address = $textual;
-                    break;
-                }
-            }
+        if (count($this->addresses)) {
+            return current($this->addresses);
         }
 
-        return $address;
+        return $this->item->getName();
     }
 
     protected function monitorNetworkInterfaces()
@@ -161,15 +148,18 @@ abstract class PluginVigiloAbstractMonitoredItem extends VigiloXml
                 }
             }
 
-            // Récupère la liste de toutes les adresses IP pour l'interface.
+            // Récupère la liste de toutes les adresses IPv4 pour l'interface.
             // Elles serviront plus tard dans selectAddress() pour choisir
             // l'adresse IP la plus appropriée pour interroger ce réseau.
             foreach ($DB->query($query2) as $nn) {
                 $query3 = IPAddress::getSQLRequestToSearchForItem("NetworkName", $nn['id']);
                 foreach ($DB->query($query3) as $ip) {
                     $addr = new IPAddress();
-                    if ($addr->getFromDB($ip['id'])) {
-                        $this->addresses[] = $addr;
+                    if ($addr->getFromDB($ip['id']) && $addr->is_ipv4()) {
+                        $textual = $addr->getTextual();
+                        if (is_string($textual)) {
+                            $this->addresses[] = $textual;
+                        }
                     }
                 }
             }
@@ -179,7 +169,7 @@ abstract class PluginVigiloAbstractMonitoredItem extends VigiloXml
     public function __toString()
     {
         return self::sprintf(
-            '<?xml version="1.0"?>' .
+            '<' . '?xml version="1.0"?' . '>' .
             '<host name="%s" address="%s" ventilation="%s">%s</host>',
             $this->item->getName(),
             $this->selectAddress(),
