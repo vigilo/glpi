@@ -70,7 +70,7 @@ class PluginVigiloMonitoredComputer extends PluginVigiloAbstractMonitoredItem
             $this->children[] =
                         $test = new VigiloTest('Partition');
             $test['label']      = $disk->getName();
-            $test['partname']   = $disk->fields['mountpoint'];
+            $test['partname']   = self::escapeRegex($disk->fields['mountpoint']);
             if (!empty($total)) {
                 $test[] = new VigiloArg('max', $total * 1024 * 1024);
             }

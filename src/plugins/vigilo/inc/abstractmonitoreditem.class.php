@@ -46,6 +46,13 @@ abstract class PluginVigiloAbstractMonitoredItem extends VigiloXml
         );
     }
 
+    protected static function escapeRegex($regex)
+    {
+        $res = preg_quote($regex);
+        $res = preg_replace("/[\x80-\xFF]+/",'.+', $res);
+        return $res;
+    }
+
     protected function selectTemplates()
     {
         $template = isset($this->item->fields['vigilo_template']) ?
@@ -136,7 +143,7 @@ abstract class PluginVigiloAbstractMonitoredItem extends VigiloXml
             $this->children[] =
                         $test = new VigiloTest('Interface');
             $test['label']  = $label;
-            $test['ifname'] = $port->getName();
+            $test['ifname'] = self::escapeRegex($port->getName());
 
             $ethport    = $ethport->find('networkports_id=' . $np['id']);
             foreach ($ethport as $rowEthPort) {
