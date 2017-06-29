@@ -69,8 +69,19 @@ class PluginVigiloMonitoredComputer extends PluginVigiloAbstractMonitoredItem
 
             $this->children[] =
                         $test = new VigiloTest('Partition');
+
+            // On supprime les éventuels / ou \ finaux (p.ex. "C:\").
+            $mountpoint = rtrim($disk->fields['mountpoint'], '/\\');
+            $mountpoint = self::escapeRegex($mountpoint);
+
+            // Si présence d'un ":", il s'agit probablement d'un volume Windows.
+            // On ajoute "\\.*" pour matcher le label éventuellement associé.
+            if (false !== strpos($mountpoint, ':')) {
+                $mountpoint .= '\\\\.*';
+            }
+
+            $test['partname']   = $mountpoint;
             $test['label']      = $disk->getName();
-            $test['partname']   = self::escapeRegex($disk->fields['mountpoint']);
             if (!empty($total)) {
                 $test[] = new VigiloArg('max', $total * 1024 * 1024);
             }
