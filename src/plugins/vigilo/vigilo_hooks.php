@@ -6,25 +6,8 @@ class VigiloHooks
     // concernant les équipements supportés.
     public function preItemUpdate($item)
     {
-        global $DB;
-
-        $id = $item->getID();
-        $query = <<<SQL
-SELECT `template`
-FROM glpi_plugin_vigilo_template
-WHERE `id` = $id;
-SQL;
-
-        $item->fields['vigilo_template'] = 0;
-        $result = $DB->query($query);
-        if ($result) {
-            $tpl        = $DB->result($result, 0, "template");
-            $templates  = PluginVigiloTemplate::getTemplates();
-            $index      = array_search($tpl, $templates, true);
-            if (false !== $index) {
-                $item->fields['vigilo_template'] = $index;
-            }
-        }
+        $index = PluginVigiloTemplate::getTemplateIndexForItem($item);
+        $item->fields['vigilo_template'] = (int) $index;
     }
 
     public function itemAddOrUpdate($item)
@@ -43,9 +26,6 @@ VALUES ($id, '$template')
 ON DUPLICATE KEY UPDATE `template` = '$template';
 SQL;
             $DB->query($query);
-            $item->fields['vigilo_template'] = $templates[$tplId];
-        } else {
-            $item->fields['vigilo_template'] = null;
         }
 
         // Si la mise à jour modifie le technicien associé à la machine,

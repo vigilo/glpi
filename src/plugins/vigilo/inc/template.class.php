@@ -97,4 +97,35 @@ SQL;
         }
         return $res;
     }
+
+    public static function getTemplateIndexForItem(CommonDBTM $item)
+    {
+        $tpl        = self::getTemplateNameForItem($item);
+        if (null === $tpl) {
+            return null;
+        }
+
+        $templates  = self::getTemplates();
+        $index      = array_search($tpl, $templates, true);
+        return (false !== $index ? $index : null);
+    }
+
+    public static function getTemplateNameForItem(CommonDBTM $item)
+    {
+        global $DB;
+
+        $id = $item->getID();
+        $query = <<<SQL
+SELECT `template`
+FROM glpi_plugin_vigilo_template
+WHERE `id` = $id;
+SQL;
+
+        $result = $DB->query($query);
+        if (!$result) {
+            return null;
+        }
+
+        return $DB->result($result, 0, "template");
+    }
 }
