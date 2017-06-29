@@ -49,7 +49,7 @@ abstract class PluginVigiloAbstractMonitoredItem extends VigiloXml
     protected static function escapeRegex($regex)
     {
         $res = preg_quote($regex);
-        $res = preg_replace("/[\x80-\xFF]+/",'.+', $res);
+        $res = preg_replace("/[\x80-\xFF]+/", '.+', $res);
         return $res;
     }
 
