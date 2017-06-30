@@ -115,12 +115,18 @@ SQL;
             // Ecriture du fichier de configuration principal (host).
             $this->writeVigiloConfig($obj, "hosts");
 
+            /*
+            @FIXME  Ce code pose encore des problèmes, et le fait de n'afficher
+                    que l'état de l'hôte sur les cartes auto-générées est un
+                    point bloquant. Cf. ticket #1593.
+
             // Création d'un service de haut niveau "services:<nom>"
             // qui affichera le pire état des services de la machine "<nom>",
             // et d'un service "machine:<nom>" qui affichera le pire état
             // entre l'état de la machine "<nom>" et de ses services.
             $hls = new PluginVigiloHls($obj);
             $this->writeVigiloConfig($hls, "hlservices");
+            */
         }
     }
 
