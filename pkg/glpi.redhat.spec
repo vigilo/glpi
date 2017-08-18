@@ -6,7 +6,7 @@ Summary:    Vigilo integration plugin for GLPI
 Version:    @VERSION@
 Release:    @RELEASE@%{?dist}
 Source0:    %{name}-%{version}.tar.gz
-URL:        http://www.projet-vigilo.org
+URL:        http://www.vigilo-nms.com
 Group:      Applications/System
 BuildRoot:  %{_tmppath}/%{name}-%{version}-%{release}-build
 License:    GPLv2
@@ -22,7 +22,7 @@ Requires(pre): vigilo-vigiconf
 %description
 This package provides a plugin that makes it possible to configure Vigilo
 and deploy new configuration files from GLPI's GUI.
-This application is part of the Vigilo Project <http://vigilo-project.org>
+This application is part of the Vigilo Project <http://vigilo-nms.com>
 
 %prep
 %setup -q
