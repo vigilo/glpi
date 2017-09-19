@@ -65,7 +65,7 @@ SQL;
     {
         $tpl_dir    = VIGILO_CONFDIR . DIRECTORY_SEPARATOR . 'hosttemplates';
         $templates  = array();
-        $pattern    = "/<template\\s+(?:.*?\\s+)?name=(['\"])(\w+)\\1>/";
+        $pattern    = "/<template\\s+(?:.*?\\s+)?name=(['\"])([^'\"]+)\\1>/";
         $dir_it     = new RecursiveDirectoryIterator($tpl_dir, RecursiveDirectoryIterator::SKIP_DOTS);
         $it_it      = new RecursiveIteratorIterator($dir_it);
         $files      = new CallbackFilterIterator($it_it, array(__CLASS__, 'filterFile'));
