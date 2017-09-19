@@ -18,6 +18,10 @@ class PluginVigiloTemplate extends CommonDBTM
             return;
         }
 
+        if (array_key_exists('formfooter', $options) && false === $options['formfooter']) {
+            return;
+        }
+
         $opts = array(
             "name" => "vigilo_template",
             "value" => 0,
