@@ -49,7 +49,7 @@ class PluginVigiloMenu extends CommonGLPI
         }
 
         echo <<<HTML
-<h1>Vigilo</h1><form method="post" action="?itemtype=vigilo">
+<h1>Vigilo NMS</h1><form method="post" action="?itemtype=vigilo">
 <textarea readonly='readonly' $disabled id='vigilo_deploy' style='display: block; width: 99%; height: 380px'>
 HTML;
 

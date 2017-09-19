@@ -41,7 +41,7 @@ SQL;
             }
         }
 
-        echo "<tr><th colspan='4'>Vigilo</th></tr>";
+        echo "<tr><th colspan='4'>Vigilo NMS</th></tr>";
         echo '<tr>';
         echo '<td><label for="vigilo_template">Vigilo Template</td>';
         echo '<td>';
