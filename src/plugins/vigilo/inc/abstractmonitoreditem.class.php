@@ -98,7 +98,7 @@ abstract class PluginVigiloAbstractMonitoredItem extends VigiloXml
         $technician = new User();
         $technician->getFromDB($this->item->fields["users_id_tech"]);
         if (NOT_AVAILABLE !== $technician->getName()) {
-            $this->children[] = new VigiloGroup("/Technicians/" . $technician->getName());
+            $this->children[] = new VigiloGroup("/Technicians/" . $technician->fields['name']);
         }
     }
 
