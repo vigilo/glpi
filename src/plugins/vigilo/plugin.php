@@ -125,9 +125,19 @@ function plugin_vigilo_getAddSearchOptions($itemtype)
         return $options;
     }
 
+    // @HACK: pour que les actions en masse fonctionnent,
+    // on doit utiliser le nom réel du champ dans "linkfield",
+    // alors que pour les actions sur un objet, il faut utiliser
+    // le nom faisant le lien avec le type de l'objet.
+    if (strpos($_SERVER["SCRIPT_FILENAME"], "/ajax/dropdownMassiveAction.php") !== false) {
+        $linkfield = 'vigilo_template';
+    } else {
+        $linkfield = 'id';
+    }
+
     $options[7007]['table']           = 'glpi_plugin_vigilo_template';
     $options[7007]['field']           = 'template';
-    $options[7007]['linkfield']       = 'id';
+    $options[7007]['linkfield']       = $linkfield;
     $options[7007]['name']            = 'Template Vigilo';
     $options[7007]['massiveaction']   = true;
     $options[7007]['datatype']        = 'dropdown';

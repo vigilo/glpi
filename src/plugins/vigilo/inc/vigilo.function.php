@@ -137,3 +137,17 @@ function plugin_vigilo_getSoftwareMapping()
         'tinyproxy'     => array("Proxy"),
     );
 }
+
+function plugin_vigilo_MassiveActionsFieldsDisplay($params)
+{
+    global $CFG_GLPI;
+
+    $opts = array(
+        "name" => "vigilo_template",
+        "value" => 0,
+        "url" => $CFG_GLPI["root_doc"] . "/plugins/vigilo/ajax/getTemplates.php"
+    );
+
+    Dropdown::show('PluginVigiloTemplate', $opts);
+    return true;
+}
