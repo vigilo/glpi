@@ -1,4 +1,5 @@
 NAME = glpi
+php := $(shell which php)
 
 all:
 
@@ -34,4 +35,7 @@ clean: clean_common
 
 doc: sphinxdoc
 
-.PHONY: all install install_pkg clean man doc
+serve:
+	$(php) -S 0.0.0.0:8080 -t src
+
+.PHONY: all install install_pkg clean man doc serve
