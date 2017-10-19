@@ -33,8 +33,6 @@ install_permissions:
 
 clean: clean_common
 
-doc: sphinxdoc
-
 serve:
 	$(php) -S 0.0.0.0:8080 -t src
 
@@ -71,5 +69,8 @@ compile_catalog: update_catalog
 		echo -n "$$lang : " && msgfmt --statistics -o "src/plugins/vigilo/locales/$$lang.mo" "src/plugins/vigilo/locales/$$lang.po"; \
 	done
 
-.PHONY: all install install_pkg clean man doc serve \
+tests doc apidoc:
+
+.PHONY: all install install_pkg install_base install_data install_permissions \
+	clean man doc serve tests doc apidoc \
 	i18n extract_messages update_catalog identity_catalog compile_catalog
