@@ -122,25 +122,26 @@ SQL;
                 $DB->query($query);
             }
         } elseif ($needs_deploy) {
-            echo "Cliquez sur « Déployer la configuration » pour appliquer les modifications en attente.";
+            echo __('Click on "Deploy the configuration" to apply changes.', "vigilo");
         } else {
-            echo "La configuration est à jour.";
+            echo __("The configuration is already up-to-date.", "vigilo");
         }
 
         $force = empty($_POST['force']) ? '' : 'checked';
         $debug = empty($_POST['debug']) ? '' : 'checked';
+        $debug_title = htmlspecialchars(__("Display debug and progress information for Vigilo", "vigilo"), ENT_XML1 | ENT_QUOTES, "utf-8");
+        $debug_label = htmlspecialchars(__("Display debug information", "vigilo"), ENT_XML1 | ENT_QUOTES, "utf-8");
+        $force_title = htmlspecialchars(__("Force a full deployment rather than an incremental one", "vigilo"), ENT_XML1 | ENT_QUOTES, "utf-8");
+        $force_label = htmlspecialchars(__("Regenerate all files", "vigilo"), ENT_XML1 | ENT_QUOTES, "utf-8");
+        $deploy_title = htmlspecialchars(__("Deploy the configuration", "vigilo"), ENT_XML1 | ENT_QUOTES, "utf-8");
         echo <<<HTML
 </textarea>
 
-<button type="submit" name="deploy" value="1">Déployer la configuration</button>
+<button type="submit" name="deploy" value="1">$deploy_title</button>
 
-<label for="debug"><input name="debug" id="debug" value="1" type="checkbox" $debug
- title="Affiche les informations de diagnostic et de progression de Vigilo"
-/> Afficher les informations de débogage</label>
+<label for="debug"><input name="debug" id="debug" value="1" type="checkbox" $debug title="$debug_title"/> $debug_label</label>
 
-<label for="force"><input name="force" id="force" value="1" type="checkbox" $force
- title="Force un déploiement complet plutôt qu'un déploiement en mode incrémental"
-/> Regénérer tous les fichiers</label>
+<label for="force"><input name="force" id="force" value="1" type="checkbox" $force title="$force_title"/> $force_label</label>
 HTML;
         Html::closeForm();
     }

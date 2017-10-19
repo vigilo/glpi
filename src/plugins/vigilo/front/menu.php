@@ -9,7 +9,7 @@ include(
 Session::checkRight("config", UPDATE);
 
 Html::header(
-    __('Vigilo', 'vigilo'),
+    'Vigilo',
     $_SERVER["PHP_SELF"],
     "plugins",
     "PluginVigiloMenu",

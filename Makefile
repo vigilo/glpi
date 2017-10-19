@@ -38,4 +38,38 @@ doc: sphinxdoc
 serve:
 	$(php) -S 0.0.0.0:8080 -t src
 
-.PHONY: all install install_pkg clean man doc serve
+# Internationalisation
+i18n: extract_messages identity_catalog update_catalog compile_catalog
+
+extract_messages:
+	find src/plugins/vigilo/ -name '*.php' | \
+		xargs xgettext --keyword=_n:1,2,4t --keyword=__s:1,2t --keyword=__:1,2t \
+		               --keyword=_e:1,2t --keyword=_x:1c,2,3t --keyword=_ex:1c,2,3t \
+		               --keyword=_nx:1c,2,3,5t --keyword=_sx:1c,2,3t \
+		                -L PHP --from-code=utf-8 \
+		                -o src/plugins/vigilo/locales/glpi.pot\
+		               --force-po --escape --strict --sort-output \
+		               --add-comments=TRANSLATOR --copyright-holder=CSSI \
+		               --package-name="Vigilo NMS" --foreign-user \
+		               --msgid-bugs-address=contact.vigilo@c-s.fr
+
+init_catalog: extract_messages
+	msginit --no-translator -i src/plugins/vigilo/locales/glpi.pot --locale="$(LANG).UTF-8" -o "src/plugins/vigilo/locales/$(LANG).po"
+
+update_catalog: extract_messages
+	for po in `find src/plugins/vigilo/locales/ -name '*.po'`; do \
+		touch $$po; \
+		msgmerge -N -i -s -o "$$po" "$$po" src/plugins/vigilo/locales/glpi.pot; \
+	done
+
+identity_catalog: extract_messages
+	$(MAKE) init_catalog LANG=en_GB
+
+compile_catalog: update_catalog
+	for lang in `find src/plugins/vigilo/locales/ -name '*.po'`; do \
+		lang=`basename "$$lang" .po`; \
+		echo -n "$$lang : " && msgfmt --statistics -o "src/plugins/vigilo/locales/$$lang.mo" "src/plugins/vigilo/locales/$$lang.po"; \
+	done
+
+.PHONY: all install install_pkg clean man doc serve \
+	i18n extract_messages update_catalog identity_catalog compile_catalog

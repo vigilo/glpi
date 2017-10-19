@@ -33,3 +33,4 @@ src/twisted/plugins/dropin.cache
 !/src/plugins/
 /src/plugins/*
 !/src/plugins/vigilo
+/src/plugins/vigilo/locales/*.mo
