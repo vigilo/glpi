@@ -54,7 +54,6 @@ function plugin_vigilo_getSoftwareMapping()
          */
         'vigilo-connector-metro'        => array("VigiloConnector", array("type" => "metro")),
         'vigilo-connector-nagios'       => array("VigiloConnector", array("type" => "nagios")),
-        'vigilo-connector-syncevents'   => array("VigiloConnector", array("type" => "syncevents")),
         'vigilo-connector-vigiconf'     => array("VigiloConnector", array("type" => "vigiconf")),
 
 
