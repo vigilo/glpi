@@ -12,7 +12,7 @@ BuildRoot:  %{_tmppath}/%{name}-%{version}-%{release}-build
 License:    GPLv2
 Buildarch:  noarch
 
-Requires:   glpi
+Requires:   glpi >= 9.1.1
 Requires:   vigilo-vigiconf
 
 Requires(pre): shadow-utils
