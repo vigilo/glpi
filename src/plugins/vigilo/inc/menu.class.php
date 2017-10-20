@@ -39,6 +39,11 @@ class PluginVigiloMenu extends CommonGLPI
         return array();
     }
 
+    protected static function escape($s)
+    {
+        return htmlspecialchars($s, ENT_XML1 | ENT_QUOTES, "utf-8");
+    }
+
     public static function displayMenu($res, $pipes)
     {
         global $DB;
@@ -129,19 +134,25 @@ SQL;
 
         $force = empty($_POST['force']) ? '' : 'checked';
         $debug = empty($_POST['debug']) ? '' : 'checked';
-        $debug_title = htmlspecialchars(__("Display debug and progress information for Vigilo", "vigilo"), ENT_XML1 | ENT_QUOTES, "utf-8");
-        $debug_label = htmlspecialchars(__("Display debug information", "vigilo"), ENT_XML1 | ENT_QUOTES, "utf-8");
-        $force_title = htmlspecialchars(__("Force a full deployment rather than an incremental one", "vigilo"), ENT_XML1 | ENT_QUOTES, "utf-8");
-        $force_label = htmlspecialchars(__("Regenerate all files", "vigilo"), ENT_XML1 | ENT_QUOTES, "utf-8");
-        $deploy_title = htmlspecialchars(__("Deploy the configuration", "vigilo"), ENT_XML1 | ENT_QUOTES, "utf-8");
+        $debug_title = htmlspecialchars(
+            __("Display debug and progress information for Vigilo", "vigilo"),
+            ENT_XML1 | ENT_QUOTES,
+            "utf-8"
+        );
+        $debug_label = self::escape(__("Display debug information", "vigilo"));
+        $force_title = self::escape(__("Force a full deployment rather than an incremental one", "vigilo"));
+        $force_label = self::escape(__("Regenerate all files", "vigilo"));
+        $deploy_title = self::escape(__("Deploy the configuration", "vigilo"));
         echo <<<HTML
 </textarea>
 
 <button type="submit" name="deploy" value="1">$deploy_title</button>
 
-<label for="debug"><input name="debug" id="debug" value="1" type="checkbox" $debug title="$debug_title"/> $debug_label</label>
+<label for="debug"><input name="debug" id="debug" value="1"
+  type="checkbox" $debug title="$debug_title"/> $debug_label</label>
 
-<label for="force"><input name="force" id="force" value="1" type="checkbox" $force title="$force_title"/> $force_label</label>
+<label for="force"><input name="force" id="force" value="1"
+  type="checkbox" $force title="$force_title"/> $force_label</label>
 HTML;
         Html::closeForm();
     }
