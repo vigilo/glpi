@@ -69,7 +69,11 @@ compile_catalog: update_catalog
 		echo -n "$$lang : " && msgfmt --statistics -o "src/plugins/vigilo/locales/$$lang.mo" "src/plugins/vigilo/locales/$$lang.po"; \
 	done
 
-tests doc apidoc:
+tests:
+	composer update
+	vendor/bin/phpcs
+
+doc apidoc:
 
 .PHONY: all install install_pkg install_base install_data install_permissions \
 	clean man doc serve tests doc apidoc \
