@@ -146,17 +146,27 @@ SQL;
 
     // Méthodes de mise à jour d'un équipement
     // lorsque l'un de ses composants change.
-    public function refreshSoftwareVersion($version)
+
+    // Mise à jour de la version d'un logiciel associé à un ordinateur
+    public function refreshComputerSoftwareVersion($version)
     {
         $computer = new Computer();
         $computer->getFromDB($version->getField("computers_id"));
         $this->update($computer);
     }
 
+    // Mise à jour (d'une version) d'un logiciel associé à un ordinateur
     public function refreshSoftware($software)
     {
-        $softwareVer    = new SoftwareVersion();
-        $versions       = $softwareVer->find('softwares_id=' . $software->getID());
+        if ($software instanceof SoftwareVersion) {
+            $versions = array(
+                array('id' => $software->getID())
+            );
+        } else {
+            $softwareVer    = new SoftwareVersion();
+            $versions       = $softwareVer->find('softwares_id=' . $software->getID());
+        }
+
         foreach ($versions as $version) {
             if (!$version['id']) {
                 continue;
@@ -177,6 +187,7 @@ SQL;
         }
     }
 
+    // Mise à jour d'un volume associé à un ordinateur
     public function refreshDisk($disk)
     {
         $id = $disk->getField('computers_id');
@@ -185,6 +196,7 @@ SQL;
         $this->update($computer);
     }
 
+    // Mise à jour d'une adresse IP associées à un ordinateur
     public function refreshAddress($address)
     {
         $id         = $address->getField('mainitems_id');
@@ -194,6 +206,7 @@ SQL;
         $this->update($item);
     }
 
+    // Mise à jour d'un périphérique associé à un ordinateur
     public function refreshDevice($device)
     {
         $id         = $device->getField('items_id');
