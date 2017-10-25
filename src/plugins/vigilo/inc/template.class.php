@@ -28,7 +28,7 @@ class PluginVigiloTemplate extends CommonDBTM
             "url" => $CFG_GLPI["root_doc"] . "/plugins/vigilo/ajax/getTemplates.php"
         );
 
-        $id = $item->getID();
+        $id = (int) $item->getID();
         $query = <<<SQL
 SELECT `template`
 FROM glpi_plugin_vigilo_template
@@ -40,7 +40,7 @@ SQL;
             $templates  = static::getTemplates();
             $index      = array_search($tpl, $templates, true);
             if (false !== $index) {
-                $opts['value']      = $index;
+                $opts['value']      = (int) $index;
                 $opts['emptylabel'] = $tpl;
             }
         }
@@ -118,7 +118,7 @@ SQL;
     {
         global $DB;
 
-        $id = $item->getID();
+        $id = (int) $item->getID();
         $query = <<<SQL
 SELECT `template`
 FROM glpi_plugin_vigilo_template
