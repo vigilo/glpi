@@ -73,8 +73,8 @@ tests:
 	composer update
 	vendor/bin/phpcs
 
-doc apidoc:
+doc:
 
 .PHONY: all install install_pkg install_base install_data install_permissions \
-	clean man doc serve tests doc apidoc \
+	clean man doc serve tests doc \
 	i18n extract_messages update_catalog identity_catalog compile_catalog
