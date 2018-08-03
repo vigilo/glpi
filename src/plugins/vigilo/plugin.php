@@ -54,7 +54,7 @@ function plugin_version_vigilo()
                  'version'        => trim(file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . 'VERSION.txt')),
                  'author'         => 'CSSI',
                  'license'        => 'GPLv2+',
-                 'homepage'       => 'http://vigilo-nms.com',
+                 'homepage'       => 'https://www.vigilo-nms.com',
                  'minGlpiVersion' => VIGILO_MIN_GLPI_VERSION);
 }
 
